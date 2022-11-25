@@ -1,0 +1,356 @@
+default_iptc_tags <-
+  c(
+    "IPTC:Keywords",
+    "IPTC:Headline",
+    "IPTC:ObjectName",
+    "IPTC:Caption-Abstract"
+  )
+
+default_xmpdc_tags <-
+  c(
+    "XMP-dc:Title",
+    "XMP-dc:Subject",
+    "XMP-dc:Description"
+  )
+
+default_exif_tags <-
+  c(
+    "Title",
+    "ImageDescription",
+    "Keywords",
+    "Headline",
+    "Byline",
+    "Caption",
+    "FileName",
+    "CreateDate",
+    "DateTimeOriginal",
+    "OffsetTimeOriginal",
+    "ImageWidth",
+    "ImageHeight",
+    "Orientation",
+    "SourceFile",
+    "FileSize",
+    "FileType",
+    "*GPS*"
+  )
+
+exif_xwalk <-
+  list(
+    "description" = "image_description",
+    "lon" = "longitude",
+    "lat" = "latitude",
+    "lon_ref" = "longitude_ref",
+    "lat_ref" = "latitude_ref",
+    "path" = "source_file",
+    "img_width" = "image_width",
+    "img_height" = "image_height",
+    "exif_orientation" = "orientation"
+  )
+
+#' Read EXIF metadata to create a simple feature object or write
+#' EXIF metadata to image files
+#'
+#' @description
+#' [read_exif()] read EXIF data from folder of files. This function also assigns
+#' a cardinal direction based on the direction metadata and recodes the
+#' orientation metadata.
+#'
+#' For [write_exif()] the parameters are used to multiple tags with the same
+#' values:
+#'
+#' - title: Title, IPTC:Headline, IPTC:ObjectName, XMP-dc:Title
+#' - description: ImageDescription, XMP-dc:Description, and
+#' IPTC:Caption-Abstract
+#' - keywords: Keywords, IPTC:Keywords, XMP-dc:Subject
+#'
+#' @param path A path to folder or file.
+#' @param bbox Optional bounding box to crop returned file (excluding images
+#'   with location data outside the bounding box). If bbox is provided the
+#'   returned data will match the crs of the bbox.
+#' @param fileext The file extension or file type; defaults to `NULL`.
+#' @param tags Optional list of EXIF tags to read from files. Must include GPS
+#'   tags to create an `sf` object.
+#' @param read_iptc,read_xmpdc If `TRUE`, read default IPTC tags and/or XMP-DC
+#'   tags from file.
+#' @param ... Additional EXIF tags to pass to [exiftoolr::exif_read]
+#' @export
+#' @importFrom cli cli_abort cli_warn
+#' @importFrom rlang has_name
+read_exif <- function(path = NULL,
+                      fileext = NULL,
+                      bbox = NULL,
+                      tags = NULL,
+                      read_iptc = TRUE,
+                      read_xmpdc = TRUE,
+                      ...) {
+  is_pkg_installed("exiftoolr")
+
+  path <- get_path_files(path, fileext)
+
+  # FIXME: This is a partial list of filetypes that support GPS EXIF metadata
+  # fileext <- match.arg(fileext, c("jpg", "jpeg", "png", "tiff", "pdf"))
+
+  if (is.null(tags)) {
+    # FIXME: The default fields likely vary by file type and could be set based
+    # on that NOTE: Are there other tags that should be included by default?
+    tags <- default_exif_tags
+
+    if (read_iptc) {
+      tags <- c(tags, default_iptc_tags)
+    }
+
+    if (read_xmpdc) {
+      tags <- c(tags, default_xmpdc_tags)
+    }
+  } else if (!all(c("GPSLatitude", "GPSLongitude") %in% tags)) {
+    cli_warn(
+      c("{.arg tags} must be include {.val {c('GPSLatitude', 'GPSLongitude')}}
+        to create a {.cls sf} object from EXIF metadata.",
+        "i" = "The provided {.arg tags} are {.val {tags}}."
+      )
+    )
+  }
+
+  # FIXME: Figure out how to append path to the end of the table not the
+  # beginning
+  data <-
+    suppressMessages(
+      exiftoolr::exif_read(
+        path,
+        tags = tags
+      )
+    )
+
+  fmt_exif_data(data)
+}
+
+#' @noRd
+fmt_exif_data <- function(data) {
+  is_pkg_installed("dplyr")
+  is_pkg_installed("janitor")
+
+  data <-
+    # Rename variables
+    # FIXME: Is it possible to move this to the exif_xwalk?
+    dplyr::rename_with(
+      janitor::clean_names(data),
+      ~ sub("^gps_", "", .x)
+    )
+
+  xwalk <- exif_xwalk[rlang::has_name(data, exif_xwalk)]
+
+  data <-
+    # Rename variables
+    dplyr::rename_with(
+      data,
+      ~ names(xwalk)[which(xwalk == .x)],
+      .cols = as.character(xwalk)
+    )
+
+  data <- fmt_exif_orientation(data)
+
+  fmt_exif_direction(data)
+}
+
+#' @noRd
+fmt_exif_orientation <- function(data) {
+  has_orientation_names <-
+    rlang::has_name(data, c("exif_orientation", "img_width", "img_width"))
+
+  if (!all(has_orientation_names)) {
+    return(data)
+  }
+
+  dplyr::mutate(
+    data,
+    exif_orientation =
+      dplyr::case_when(
+        exif_orientation == 1 ~ "Horizontal (normal)",
+        exif_orientation == 2 ~ "Mirror horizontal",
+        exif_orientation == 3 ~ "Rotate 180",
+        exif_orientation == 4 ~ "Mirror vertical",
+        exif_orientation == 5 ~ "Mirror horizontal and rotate 270 CW",
+        exif_orientation == 6 ~ "Rotate 90 CW",
+        exif_orientation == 7 ~ "Mirror horizontal and rotate 90 CW",
+        exif_orientation == 8 ~ "Rotate 270 CW"
+      ),
+    orientation =
+      dplyr::case_when(
+        (img_width / img_height) > 1 ~ "landscape",
+        (img_width / img_height) < 1 ~ "portrait",
+        (img_width / img_height) == 1 ~ "square"
+      ),
+    .after = "exif_orientation"
+  )
+}
+
+#' Format img_direction as cardinal directions (degrees and wind directions)
+#'
+#' @noRd
+#' @importFrom rlang has_name
+fmt_exif_direction <- function(data, .after = "img_direction") {
+  if (!all(rlang::has_name(data, c("img_direction")))) {
+    return(data)
+  }
+
+  is_pkg_installed("dplyr")
+
+  # See https://en.wikipedia.org/wiki/Points_of_the_compass#8-wind_compass_rose
+  # FIXME: This should support an option for more or less compass points (e.g. 4
+  # or 16)
+  cardinal_degrees <-
+    c(
+      "N" = 0, "NE" = 45,
+      "E" = 90, "SE" = 135,
+      "S" = 180, "SW" = 225,
+      "W" = 270, "NW" = 315, "N" = 360
+    )
+
+  dplyr::mutate(
+    data,
+    img_cardinal_dir = cardinal_degrees[
+      findInterval(img_direction, cardinal_degrees - 22.5)
+    ],
+    img_cardinal_wind = names(img_cardinal_dir),
+    .after = .after
+  )
+}
+
+#' @name write_exif
+#' @rdname read_exif
+#' @param title Title to add to file metadata with exiftoolr, Default: `NULL`.
+#' @param author Author to add to file metadata with exiftoolr, Default: `NULL`.
+#' @param date Date to add to file metadata with exiftoolr (not currently
+#'   working), Default: `NULL`.
+#' @param keywords Keyword(s) added to file metadata with with exiftoolr,
+#'   Default: `NULL`.
+#' @param description Description added to file metadata.
+#' @param args Alternate arguments passed to [exiftoolr::exif_call()]. If args
+#'   is not `NULL`, title, author, date, and keywords are ignored; defaults to
+#'   `NULL`.
+#' @param overwrite If `TRUE`, overwrite any existing EXIF metadata present in
+#'   the provided fields; defaults to `TRUE`
+#' @param append_keywords If `TRUE`, append keywords, if `FALSE`, replace
+#'   keywords in file metadata.
+#' @export
+write_exif <- function(path,
+                       fileext = NULL,
+                       title = NULL,
+                       author = NULL,
+                       date = NULL,
+                       keywords = NULL,
+                       description = NULL,
+                       # metadata = NULL,
+                       args = NULL,
+                       overwrite = TRUE,
+                       append_keywords = FALSE) {
+  is_pkg_installed("exiftoolr")
+
+  # if (!is.null(metadata) && is.data.frame(metadata)) {
+  #
+  # }
+
+  # FIXME: I want to implement a method that allows adding, replacing, or
+  # modifying exif
+  if (is.null(args)) {
+    if (!is.null(title)) {
+      args <- c(args, glue("-Title={title}"))
+      args <- c(args, glue("-IPTC:Headline={title}"))
+      args <- c(args, glue("-IPTC:ObjectName={title}"))
+      args <- c(args, glue("-XMP-dc:Title={title}"))
+    }
+
+    if (!is.null(author)) {
+      args <- c(args, glue("-Author={author}"))
+    }
+
+    if (!is.null(description)) {
+      args <- c(args, glue("-ImageDescription={description}"))
+      args <- c(args, glue("-IPTC:Caption-Abstract={description}"))
+      args <- c(args, glue("-XMP-dc:Description={description}"))
+    }
+
+    if (!is.null(date)) {
+      # FIXME: exiftoolr::exif_call() does not support the "now" value supported
+      # by exif If CreateDate is set to now automatically, why bother revising
+      # with exiftoolr anyway? TODO: Add support for subjects (partially
+      # complete with keywords)
+      # https://stackoverflow.com/questions/28588696/python-exiftool-combining-subject-and-keyword-tags#28609886
+      date <- "now"
+      if ("png" %in% fileext) {
+        args <- c(args, glue("-CreationTime={date}"))
+      } else {
+        args <- c(args, c(glue("-CreateDate={date}"), glue("-ModifyDate={date}")))
+      }
+    }
+
+    if (!is.null(keywords)) {
+      op <- "+="
+
+      if (overwrite && !append_keywords) {
+        op <- "="
+      }
+
+      args <- c(args, paste0("-Keywords", op, keywords))
+      args <- c(args, paste0("-IPTC:Keywords", op, keywords))
+      args <- c(args, paste0("-XMP-dc:Subject", op, keywords))
+    }
+
+    if (overwrite) {
+      args <- c(args, "-overwrite_original")
+    }
+  }
+
+  if (!is.null(args)) {
+    path <- get_path_files(path)
+
+    suppressMessages(
+      suppressWarnings(
+        exiftoolr::exif_call(
+          args = args,
+          path = path,
+          quiet = TRUE
+        )
+      )
+    )
+
+    cliExtras::cli_paths(path, "Updated EXIF metadata for")
+  }
+}
+
+
+#' Pass file path and replacement tag values to write_exif based on selected tag
+#'
+#' @noRd
+walk2_write_exif <- function(path, replacement_vals, tag = "keywords") {
+  is_pkg_installed("purrr")
+
+  if (tag == "keywords") {
+    purrr::walk2(
+      path,
+      replacement_vals,
+      ~ write_exif(
+        path = .x, keywords = .y,
+        overwrite = TRUE, append_keywords = FALSE
+      )
+    )
+  } else if (tag == "title") {
+    purrr::walk2(
+      path,
+      replacement_vals,
+      ~ write_exif(
+        path = .x, title = .y,
+        overwrite = TRUE
+      )
+    )
+  } else if (tag == "description") {
+    purrr::walk2(
+      path,
+      replacement_vals,
+      ~ write_exif(
+        path = .x, description = .y,
+        overwrite = TRUE
+      )
+    )
+  }
+}
