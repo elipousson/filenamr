@@ -24,5 +24,7 @@ Suggests:
     exiftoolr,
     janitor,
     purrr,
-    rappdirs
+    rappdirs,
+    testthat (>= 3.0.0)
 Roxygen: list(markdown = TRUE)
+Config/testthat/edition: 3
