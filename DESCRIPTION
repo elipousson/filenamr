@@ -20,6 +20,7 @@ Remotes:
     elipousson/cliExtras,
     JoshOBrien/exiftoolr
 Suggests: 
+    covr,
     dplyr,
     exiftoolr,
     janitor,

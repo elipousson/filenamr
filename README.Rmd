@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 `r badger::badge_lifecycle("experimental")`
 `r badger::badge_license("MT", "blue", "https://cran.r-project.org/web/licenses/MIT")`
+[![Codecov test coverage](https://codecov.io/gh/elipousson/filenamr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/elipousson/filenamr?branch=main)
 <!-- badges: end -->
 
 The goal of filenamr is to ...

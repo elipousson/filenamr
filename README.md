@@ -8,6 +8,8 @@
 [![](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![License:
 MT](https://img.shields.io/badge/license-MT-blue.svg)](https://cran.r-project.org/web/licenses/MIT)
+[![Codecov test
+coverage](https://codecov.io/gh/elipousson/filenamr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/elipousson/filenamr?branch=main)
 <!-- badges: end -->
 
 The goal of filenamr is to …
