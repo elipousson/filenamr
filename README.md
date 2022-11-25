@@ -7,12 +7,15 @@
 
 [![](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![License:
-MT](https://img.shields.io/badge/license-MT-blue.svg)](https://cran.r-project.org/web/licenses/MIT)
+MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://cran.r-project.org/web/licenses/MIT)
 [![Codecov test
 coverage](https://codecov.io/gh/elipousson/filenamr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/elipousson/filenamr?branch=main)
 <!-- badges: end -->
 
-The goal of filenamr is to …
+The goal of filenamr is to help in creating and modifying file names and
+paths. It also supports reading and writing EXIF metadata. It is
+primarily useful for the development of packages that work with file
+reading and writing and need some utilities to support this goal.
 
 ## Installation
 
