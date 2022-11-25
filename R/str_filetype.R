@@ -57,19 +57,6 @@ str_extract_fileext <- function(string, fileext = NULL, tocase = tolower) {
   )
 }
 
-#' @name str_add_fileext
-#' @rdname str_fileext
-#' @export
-str_add_fileext <- function(string, fileext = NULL) {
-  if (!is.null(fileext) && has_fileext(string, fileext)) {
-    return(string)
-  } else if (has_fileext(string)) {
-    string <- str_remove_fileext(string)
-  }
-
-  paste0(c(string, fileext), collapse = ".")
-}
-
 #' @name has_fileext
 #' @rdname str_fileext
 #' @export

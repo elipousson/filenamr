@@ -14,8 +14,6 @@ str_remove_fileext(string, fileext = NULL)
 
 str_extract_fileext(string, fileext = NULL, tocase = tolower)
 
-str_add_fileext(string, fileext = NULL)
-
 has_fileext(string, fileext = NULL)
 }
 \arguments{
