@@ -4,7 +4,9 @@
   "identifier": "filenamr",
   "description": "Work with filenames and paths and read and write file metadata.",
   "name": "filenamr: Make and Modify File Names and Metadata",
+  "relatedLink": "https://elipousson.github.io/filenamr/",
   "codeRepository": "https://github.com/elipousson/filenamr",
+  "issueTracker": "https://github.com/elipousson/filenamr/issues",
   "license": "https://spdx.org/licenses/MIT",
   "version": "0.1.0",
   "programmingLanguage": {
@@ -173,8 +175,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "57.418KB",
-  "relatedLink": "https://elipousson.github.io/filenamr/",
+  "fileSize": "57.847KB",
   "readme": "https://github.com/elipousson/filenamr/blob/main/README.md",
   "contIntegration": "https://app.codecov.io/gh/elipousson/filenamr?branch=main"
 }

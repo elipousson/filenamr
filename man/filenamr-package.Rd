@@ -11,7 +11,9 @@ Work with filenames and paths and read and write file metadata.
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://github.com/elipousson/filenamr}
   \item \url{https://elipousson.github.io/filenamr/}
+  \item Report bugs at \url{https://github.com/elipousson/filenamr/issues}
 }
 
 }

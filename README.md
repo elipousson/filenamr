@@ -8,6 +8,9 @@
 [![](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![License:
 MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://cran.r-project.org/web/licenses/MIT)
+[![Project Status: Active - The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Codecov test
 coverage](https://codecov.io/gh/elipousson/filenamr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/elipousson/filenamr?branch=main)
 <!-- badges: end -->
@@ -53,7 +56,7 @@ make_filename(
   postfix = "map",
   fileext = "jpeg"
 )
-#> [1] "2022_11-25_baltimore_md_neighborhoods_map.jpeg"
+#> [1] "2022_11-26_baltimore_md_neighborhoods_map.jpeg"
 ```
 
 You can also pass a filename with an extension or path (setting

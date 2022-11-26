@@ -9,6 +9,9 @@ Maintainer: Eli Pousson <eli.pousson@gmail.com>
 Description: Work with filenames and paths and read and write file
     metadata.
 License: MIT + file LICENSE
+URL: https://github.com/elipousson/filenamr,
+    https://elipousson.github.io/filenamr/
+BugReports: https://github.com/elipousson/filenamr/issues
 Imports: 
     cli,
     cliExtras (>= 0.1.0),
@@ -30,4 +33,3 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
-URL: https://elipousson.github.io/filenamr/
