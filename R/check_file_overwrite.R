@@ -30,7 +30,7 @@ check_file_overwrite <- function(filename = NULL,
 
   cliExtras::cli_abort_ifnot(
     "{.arg filename} or {.arg path} must include a valid file extension.",
-    condition = has_filetype(filepath),
+    condition = has_fileext(filepath),
     call = call
   )
 

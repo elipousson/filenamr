@@ -3,7 +3,7 @@
 
 utils::globalVariables(
   c(
-    "has_filetype", "img_direction", "img_cardinal_dir"
+    "img_direction", "img_cardinal_dir"
   )
 )
 
