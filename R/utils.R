@@ -1,6 +1,9 @@
 # @staticimports pkg:stringstatic
 # str_extract str_replace str_width str_length str_pad str_remove str_detect
 
+# @staticimports pkg:isstatic
+# has_fileext
+
 utils::globalVariables(
   c(
     "img_direction", "img_cardinal_dir"

@@ -3,7 +3,6 @@
 export(check_file_overwrite)
 export(get_data_dir)
 export(get_path_fileext)
-export(has_fileext)
 export(make_filename)
 export(read_exif)
 export(str_add_fileext)

@@ -56,11 +56,3 @@ str_extract_fileext <- function(string, fileext = NULL, tocase = tolower) {
     )
   )
 }
-
-#' @name has_fileext
-#' @rdname str_fileext
-#' @export
-has_fileext <- function(string, fileext = NULL) {
-  fileext <- fileext %||% "[a-zA-Z0-9]+"
-  str_detect(string, paste0("\\.", fileext, "$(?!\\.)"))
-}
