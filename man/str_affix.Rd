@@ -15,7 +15,8 @@ str_affix(
   use_clean_names = TRUE,
   case = "snake",
   replace = c(`'` = "", `"` = "", `\%` = "_pct_", `#` = "_num_"),
-  use_make_names = TRUE
+  use_make_names = TRUE,
+  ...
 )
 
 str_prefix(
@@ -28,7 +29,8 @@ str_prefix(
   use_clean_names = TRUE,
   case = "snake",
   replace = c(`'` = "", `"` = "", `\%` = "_pct_", `#` = "_num_"),
-  use_make_names = TRUE
+  use_make_names = TRUE,
+  ...
 )
 }
 \arguments{
@@ -64,6 +66,9 @@ value.}
 \item{use_make_names}{Should \code{make.names()} be applied to ensure that the
 output is usable as a name without quoting?  (Avoiding \code{make.names()}
 ensures that the output is locale-independent but quoting may be required.)}
+
+\item{...}{Additional parameters passed to janitor::make_clean_names() if
+use_clean_names is \code{TRUE}.}
 
 \item{is_postfix}{If \code{TRUE}, use the prefix string as a postfix; defaults to
 \code{FALSE}.}

@@ -29,17 +29,18 @@ str_affix <- function(string = NULL,
                       use_clean_names = TRUE,
                       case = "snake",
                       replace = c(`'` = "", `"` = "", `%` = "_pct_", `#` = "_num_"),
-                      use_make_names = TRUE) {
-  stopifnot(
-    is.character(prefix) || is.null(prefix),
-    is.character(string) || is.null(string),
-    is.character(postfix) || is.null(postfix)
+                      use_make_names = TRUE,
+                      ...) {
+  cli_abort_ifnot(
+    "{.arg prefix} must be a {.cls character} object or NULL." = is.character(prefix) || is.null(prefix),
+    "{.arg string} must be a {.cls character} object or NULL." = is.character(string) || is.null(string),
+    "{.arg postfix}  must be a {.cls character} object or NULL." = is.character(postfix) || is.null(postfix)
   )
 
   string <- str_pad_digits(string, pad = pad, width = width)
 
   if (use_clean_names) {
-    is_pkg_installed("janitor")
+    rlang::check_installed("janitor")
     # FIXME: make_clean_names has an optional prefix and postfix parameter - can
     # I use those instead of the custom str_fix functions
     string <- janitor::make_clean_names(string, use_make_names = use_make_names)
@@ -51,7 +52,8 @@ str_affix <- function(string = NULL,
       prefix,
       sep = sep,
       use_clean_names = use_clean_names,
-      use_make_names = use_make_names
+      use_make_names = use_make_names,
+      ...
     )
   string <-
     str_prefix(string,
@@ -59,7 +61,8 @@ str_affix <- function(string = NULL,
       is_postfix = TRUE,
       sep = sep,
       use_clean_names = use_clean_names,
-      use_make_names = use_make_names
+      use_make_names = use_make_names,
+      ...
     )
 
   # Remove double separators
@@ -73,6 +76,8 @@ str_affix <- function(string = NULL,
 #' @param date.format,time.format Date or time format. Only used by [str_prefix]
 #'   if prefix is "date" or "time" and not currently accessible when using
 #'   [str_affix()] or [make_filename()].
+#' @param ... Additional parameters passed to janitor::make_clean_names() if
+#'   use_clean_names is `TRUE`.
 #' @export
 str_prefix <- function(string = NULL,
                        prefix = NULL,
@@ -83,7 +88,8 @@ str_prefix <- function(string = NULL,
                        use_clean_names = TRUE,
                        case = "snake",
                        replace = c(`'` = "", `"` = "", `%` = "_pct_", `#` = "_num_"),
-                       use_make_names = TRUE) {
+                       use_make_names = TRUE,
+                       ...) {
   if (is.null(prefix)) {
     return(string)
   }
@@ -98,23 +104,26 @@ str_prefix <- function(string = NULL,
 
   if (inherits(prefix, "Date")) {
     prefix <- format(prefix, date.format)
-  } else if (inherits(prefix, "POSIXct")) {
+  }
+
+  if (inherits(prefix, "POSIXct")) {
     prefix <- format(prefix, time.format)
   }
 
   if (use_clean_names) {
-    is_pkg_installed("janitor")
+    rlang::check_installed("janitor")
 
     prefix <-
       janitor::make_clean_names(
         prefix, case, replace,
-        use_make_names = use_make_names
+        use_make_names = use_make_names,
+        ...
       )
   }
 
   if (is_postfix) {
-    paste(c(string, prefix), collapse = sep)
-  } else {
-    paste(c(prefix, string), collapse = sep)
+    return(paste(c(string, prefix), collapse = sep))
   }
+
+  paste(c(prefix, string), collapse = sep)
 }
