@@ -19,7 +19,13 @@
     <loc>https://elipousson.github.io/filenamr/reference/check_file_overwrite.html</loc>
   </url>
   <url>
+    <loc>https://elipousson.github.io/filenamr/reference/default_tags.html</loc>
+  </url>
+  <url>
     <loc>https://elipousson.github.io/filenamr/reference/filenamr-package.html</loc>
+  </url>
+  <url>
+    <loc>https://elipousson.github.io/filenamr/reference/fmt_exif_direction.html</loc>
   </url>
   <url>
     <loc>https://elipousson.github.io/filenamr/reference/get_data_dir.html</loc>
