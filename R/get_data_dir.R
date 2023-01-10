@@ -44,7 +44,7 @@ get_data_dir <- function(path = NULL,
   }
 
   if (cache) {
-    is_pkg_installed("rappdirs")
+    rlang::check_installed("rappdirs")
     path <- path %||% rappdirs::user_cache_dir(appname)
   }
 
@@ -79,7 +79,7 @@ get_data_dir <- function(path = NULL,
     return(invisible(NULL))
   }
 
-  cliExtras::cli_inform_ifnot(
+  cli_inform_ifnot(
     c("v" = "New directory created at {.file {path}}"),
     condition = quiet
   )
@@ -115,7 +115,7 @@ get_path_fileext <- function(path,
     file_list <- path
   }
 
-  cliExtras::cli_abort_ifnot(
+  cli_abort_ifnot(
     c("A valid file or directory {.arg path} must be provided.",
       "i" = "The provided {.arg path} {.file {path}} does not exist."
     ),
@@ -131,7 +131,7 @@ get_path_fileext <- function(path,
   # https://stackoverflow.com/questions/17374651/find-the-n-most-common-values-in-a-vector
   fileext <- names(sort(table(fileext), decreasing = TRUE)[1:n])
 
-  cliExtras::cli_inform_ifnot(
+  cli_inform_ifnot(
     c("The directory {.file {path}} has more than {n} unique file extensions.",
       "i" = "Using {n} most common file extensions{?s}: {.val {fileext}}"
     ),

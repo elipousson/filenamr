@@ -28,7 +28,7 @@ check_file_overwrite <- function(filename = NULL,
     }
   }
 
-  cliExtras::cli_abort_ifnot(
+  cli_abort_ifnot(
     "{.arg filename} or {.arg path} must include a valid file extension.",
     condition = has_fileext(filepath),
     call = call
@@ -36,16 +36,18 @@ check_file_overwrite <- function(filename = NULL,
 
   if (file.exists(filepath)) {
     if (!overwrite && ask && rlang::is_interactive()) {
+      path <- dirname(filepath)
       overwrite <-
         cliExtras::cli_yesno(
           c(
-            "i" = "A file with the same name exists in {.path {path}}",
+            "i" = "A file with the same name exists at {.path {path}}",
             ">" = "Do you want to overwrite {.val {filename}}?"
-          )
+          ),
+          n_yes = 1, n_no = 1
         )
     }
 
-    cliExtras::cli_abort_ifnot(
+    cli_abort_ifnot(
       c(
         "!" = "{.file {filename}} can't be saved.",
         "i" = "A file with the same name already exists.
@@ -55,8 +57,8 @@ check_file_overwrite <- function(filename = NULL,
       call = call
     )
 
-    cliExtras::cli_inform_ifnot(
-      c("v" = "Removing {.path {filepath}}"),
+    cli_inform_ifnot(
+      c("v" = "Removing {.path {filename}}"),
       condition = quiet
     )
 

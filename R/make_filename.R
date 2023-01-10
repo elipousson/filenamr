@@ -36,7 +36,7 @@ make_filename <- function(name = NULL,
                           appname = NULL,
                           create = TRUE,
                           increment = NULL) {
-  cliExtras::cli_abort_ifnot(
+  cli_abort_ifnot(
     "{.arg name} or {.arg filename} must be provided.",
     condition = is.character(c(name, filename))
   )
@@ -51,7 +51,7 @@ make_filename <- function(name = NULL,
   # If file name is not provided, filename is based on label, name, pad and
   # width
   if (!is.null(name)) {
-    cliExtras::cli_warn_ifnot(
+    cli_warn_ifnot(
       "The provided {.arg filename} can't be used
       if {.arg name} is also provided.",
       condition = is.null(filename)
