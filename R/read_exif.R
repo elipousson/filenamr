@@ -1,42 +1,6 @@
-default_iptc_tags <-
-  c(
-    "IPTC:Keywords",
-    "IPTC:Headline",
-    "IPTC:ObjectName",
-    "IPTC:Caption-Abstract"
-  )
-
-default_xmpdc_tags <-
-  c(
-    "XMP-dc:Title",
-    "XMP-dc:Subject",
-    "XMP-dc:Description"
-  )
-
-default_exif_tags <-
-  c(
-    "Title",
-    "ImageDescription",
-    "Keywords",
-    "Headline",
-    "Byline",
-    "Caption",
-    "FileName",
-    "CreateDate",
-    "DateTimeOriginal",
-    "OffsetTimeOriginal",
-    "ImageWidth",
-    "ImageHeight",
-    "Orientation",
-    "SourceFile",
-    "FileSize",
-    "FileType",
-    "*GPS*"
-  )
-
 exif_xwalk <-
   list(
-    "description" = "image_description",
+    "img_description" = "image_description",
     "lon" = "longitude",
     "lat" = "latitude",
     "lon_ref" = "longitude_ref",
@@ -70,8 +34,6 @@ exif_xwalk <-
 #' @param fileext The file extension or file type; defaults to `NULL`.
 #' @param tags Optional list of EXIF tags to read from files. Must include GPS
 #'   tags to create an `sf` object.
-#' @param read_iptc,read_xmpdc If `TRUE`, read default IPTC tags and/or XMP-DC
-#'   tags from file.
 #' @param ... Additional EXIF tags to pass to [exiftoolr::exif_read]
 #' @export
 #' @importFrom cli cli_abort cli_warn
@@ -79,30 +41,17 @@ exif_xwalk <-
 read_exif <- function(path = NULL,
                       fileext = NULL,
                       bbox = NULL,
-                      tags = NULL,
-                      read_iptc = TRUE,
-                      read_xmpdc = TRUE,
+                      tags = getOption("read_exif.tags", default = default_tags),
+                      geometry = FALSE,
                       ...) {
-  is_pkg_installed("exiftoolr")
+  rlang::check_installed("exiftoolr")
 
   path <- get_path_files(path, fileext)
 
   # FIXME: This is a partial list of filetypes that support GPS EXIF metadata
   # fileext <- match.arg(fileext, c("jpg", "jpeg", "png", "tiff", "pdf"))
 
-  if (is.null(tags)) {
-    # FIXME: The default fields likely vary by file type and could be set based
-    # on that NOTE: Are there other tags that should be included by default?
-    tags <- default_exif_tags
-
-    if (read_iptc) {
-      tags <- c(tags, default_iptc_tags)
-    }
-
-    if (read_xmpdc) {
-      tags <- c(tags, default_xmpdc_tags)
-    }
-  } else if (!all(c("GPSLatitude", "GPSLongitude") %in% tags)) {
+  if (geometry && !all(c("GPSLatitude", "GPSLongitude") %in% tags)) {
     cli_warn(
       c("{.arg tags} must be include {.val {c('GPSLatitude', 'GPSLongitude')}}
         to create a {.cls sf} object from EXIF metadata.",
@@ -125,9 +74,9 @@ read_exif <- function(path = NULL,
 }
 
 #' @noRd
-fmt_exif_data <- function(data) {
-  is_pkg_installed("dplyr")
-  is_pkg_installed("janitor")
+fmt_exif_data <- function(data, geometry = FALSE) {
+  rlang::check_installed("dplyr")
+  rlang::check_installed("janitor")
 
   data <-
     # Rename variables
@@ -144,77 +93,27 @@ fmt_exif_data <- function(data) {
     dplyr::rename_with(
       data,
       ~ names(xwalk)[which(xwalk == .x)],
-      .cols = as.character(xwalk)
+      .cols = dplyr::all_of(as.character(xwalk))
     )
 
   data <- fmt_exif_orientation(data)
 
-  fmt_exif_direction(data)
-}
+  data <- fmt_exif_direction(data)
 
-#' @noRd
-fmt_exif_orientation <- function(data) {
-  has_orientation_names <-
-    rlang::has_name(data, c("exif_orientation", "img_width", "img_width"))
+  if (geometry) {
+    rlang::check_installed("sf")
 
-  if (!all(has_orientation_names)) {
-    return(data)
+    data <-
+      sf::st_as_sf(
+        data,
+        coords = c("lon", "lat"),
+        crs = 4326
+      )
   }
 
-  dplyr::mutate(
-    data,
-    exif_orientation =
-      dplyr::case_when(
-        exif_orientation == 1 ~ "Horizontal (normal)",
-        exif_orientation == 2 ~ "Mirror horizontal",
-        exif_orientation == 3 ~ "Rotate 180",
-        exif_orientation == 4 ~ "Mirror vertical",
-        exif_orientation == 5 ~ "Mirror horizontal and rotate 270 CW",
-        exif_orientation == 6 ~ "Rotate 90 CW",
-        exif_orientation == 7 ~ "Mirror horizontal and rotate 90 CW",
-        exif_orientation == 8 ~ "Rotate 270 CW"
-      ),
-    orientation =
-      dplyr::case_when(
-        (img_width / img_height) > 1 ~ "landscape",
-        (img_width / img_height) < 1 ~ "portrait",
-        (img_width / img_height) == 1 ~ "square"
-      ),
-    .after = "exif_orientation"
-  )
+  data
 }
 
-#' Format img_direction as cardinal directions (degrees and wind directions)
-#'
-#' @noRd
-#' @importFrom rlang has_name
-fmt_exif_direction <- function(data, .after = "img_direction") {
-  if (!all(rlang::has_name(data, c("img_direction")))) {
-    return(data)
-  }
-
-  is_pkg_installed("dplyr")
-
-  # See https://en.wikipedia.org/wiki/Points_of_the_compass#8-wind_compass_rose
-  # FIXME: This should support an option for more or less compass points (e.g. 4
-  # or 16)
-  cardinal_degrees <-
-    c(
-      "N" = 0, "NE" = 45,
-      "E" = 90, "SE" = 135,
-      "S" = 180, "SW" = 225,
-      "W" = 270, "NW" = 315, "N" = 360
-    )
-
-  dplyr::mutate(
-    data,
-    img_cardinal_dir = cardinal_degrees[
-      findInterval(img_direction, cardinal_degrees - 22.5)
-    ],
-    img_cardinal_wind = names(img_cardinal_dir),
-    .after = .after
-  )
-}
 
 #' @name write_exif
 #' @rdname read_exif
@@ -244,7 +143,7 @@ write_exif <- function(path,
                        args = NULL,
                        overwrite = TRUE,
                        append_keywords = FALSE) {
-  is_pkg_installed("exiftoolr")
+  rlang::check_installed("exiftoolr")
 
   # if (!is.null(metadata) && is.data.frame(metadata)) {
   #
@@ -323,7 +222,7 @@ write_exif <- function(path,
 #'
 #' @noRd
 walk2_write_exif <- function(path, replacement_vals, tag = "keywords") {
-  is_pkg_installed("purrr")
+  rlang::check_installed("purrr")
 
   if (tag == "keywords") {
     purrr::walk2(

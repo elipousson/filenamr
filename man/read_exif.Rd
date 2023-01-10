@@ -10,9 +10,8 @@ read_exif(
   path = NULL,
   fileext = NULL,
   bbox = NULL,
-  tags = NULL,
-  read_iptc = TRUE,
-  read_xmpdc = TRUE,
+  tags = getOption("read_exif.tags", default = default_tags),
+  geometry = FALSE,
   ...
 )
 
@@ -40,9 +39,6 @@ returned data will match the crs of the bbox.}
 
 \item{tags}{Optional list of EXIF tags to read from files. Must include GPS
 tags to create an \code{sf} object.}
-
-\item{read_iptc, read_xmpdc}{If \code{TRUE}, read default IPTC tags and/or XMP-DC
-tags from file.}
 
 \item{...}{Additional EXIF tags to pass to \link[exiftoolr:exif_read]{exiftoolr::exif_read}}
 
