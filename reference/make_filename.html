@@ -72,14 +72,16 @@ files.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>name</dt>
 <dd><p>Name to make file name converted to snake case with
-<code><a href="https://rdrr.io/pkg/janitor/man/make_clean_names.html" class="external-link">janitor::make_clean_names()</a></code>, e.g. "Residential zoning map" becomes
-"residential_zoning_map"</p></dd>
+<code><a href="https://sfirke.github.io/janitor/reference/make_clean_names.html" class="external-link">janitor::make_clean_names()</a></code>, e.g. "Residential zoning map" becomes
+"residential_zoning_map". If the name includes a file extension it is
+assumed that the filename has been provided as the name parameter.</p></dd>
 
 
 <dt>label</dt>
 <dd><p>Label to combine with name converted to snake case with
-<code><a href="https://rdrr.io/pkg/janitor/man/make_clean_names.html" class="external-link">janitor::make_clean_names()</a></code>. The label is designed to identify the area
-or other shared characteristics across multiple data files, maps, or plots.</p></dd>
+<code><a href="https://sfirke.github.io/janitor/reference/make_clean_names.html" class="external-link">janitor::make_clean_names()</a></code>. The label is designed to identify the area
+or other shared characteristics across multiple data files, maps, or plots.
+label is ignored if name is NULL or if name includes a file extension.</p></dd>
 
 
 <dt>fileext</dt>
@@ -136,6 +138,24 @@ present in string, return string as is.</p></dd>
 
 </dl></div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">make_filename</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  name <span class="op">=</span> <span class="st">"plot"</span>,</span></span>
+<span class="r-in"><span>  label <span class="op">=</span> <span class="st">"Group a"</span>,</span></span>
+<span class="r-in"><span>  fileext <span class="op">=</span> <span class="st">"png"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "group_a_plot.png"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">make_filename</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  name <span class="op">=</span> <span class="st">"plot"</span>,</span></span>
+<span class="r-in"><span>  prefix <span class="op">=</span> <span class="st">"date"</span>,</span></span>
+<span class="r-in"><span>  fileext <span class="op">=</span> <span class="st">"png"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2023-02-15_plot.png"</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
