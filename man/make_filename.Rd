@@ -23,11 +23,13 @@ make_filename(
 \arguments{
 \item{name}{Name to make file name converted to snake case with
 \code{\link[janitor:make_clean_names]{janitor::make_clean_names()}}, e.g. "Residential zoning map" becomes
-"residential_zoning_map"}
+"residential_zoning_map". If the name includes a file extension it is
+assumed that the filename has been provided as the name parameter.}
 
 \item{label}{Label to combine with name converted to snake case with
 \code{\link[janitor:make_clean_names]{janitor::make_clean_names()}}. The label is designed to identify the area
-or other shared characteristics across multiple data files, maps, or plots.}
+or other shared characteristics across multiple data files, maps, or plots.
+label is ignored if name is NULL or if name includes a file extension.}
 
 \item{fileext}{File type or extension.}
 
@@ -63,5 +65,19 @@ present in string, return string as is.}
 \description{
 A helper function to create consistent file names for plots created with data
 files.
+}
+\examples{
+make_filename(
+  name = "plot",
+  label = "Group a",
+  fileext = "png"
+)
+
+make_filename(
+  name = "plot",
+  prefix = "date",
+  fileext = "png"
+)
+
 }
 \concept{read_write}

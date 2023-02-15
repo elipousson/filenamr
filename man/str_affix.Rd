@@ -24,7 +24,7 @@ str_prefix(
   prefix = NULL,
   sep = "_",
   is_postfix = FALSE,
-  date.format = "\%F",
+  date.format = "\%Y-\%m-\%d",
   time.format = "\%Y-\%m-\%d_\%I-\%M-\%S_\%p",
   use_clean_names = TRUE,
   case = "snake",

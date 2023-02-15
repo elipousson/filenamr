@@ -5,23 +5,38 @@
 #'
 #' @param name Name to make file name converted to snake case with
 #'   [janitor::make_clean_names()], e.g. "Residential zoning map" becomes
-#'   "residential_zoning_map"
+#'   "residential_zoning_map". If the name includes a file extension it is
+#'   assumed that the filename has been provided as the name parameter.
 #' @param label Label to combine with name converted to snake case with
 #'   [janitor::make_clean_names()]. The label is designed to identify the area
 #'   or other shared characteristics across multiple data files, maps, or plots.
+#'   label is ignored if name is NULL or if name includes a file extension.
 #' @param fileext File type or extension.
 #' @param filename File name; if file name is `NULL`, name and file type are
 #'   both required.
 #' @param path Path to file or data directory.
 #' @param prefix File name prefix. "date" adds a date prefix, "time" adds a
 #'   date/time prefix; defaults to `NULL`.
-#' @inheritParams str_pad_digits
+#' @inheritParams isstatic::str_pad_digits
 #' @param postfix File name postfix; defaults to `NULL`.
 #' @param cache If `TRUE`, path is set to the package cache directory using
 #'   [get_data_dir()]; defaults to `FALSE`.
 #' @inheritParams get_data_dir
-#' @inheritParams str_increment_digits
+#' @inheritParams isstatic::str_increment_digits
 #' @family read_write
+#' @examples
+#' make_filename(
+#'   name = "plot",
+#'   label = "Group a",
+#'   fileext = "png"
+#' )
+#'
+#' make_filename(
+#'   name = "plot",
+#'   prefix = "date",
+#'   fileext = "png"
+#' )
+#'
 #' @export
 make_filename <- function(name = NULL,
                           label = NULL,
@@ -41,6 +56,11 @@ make_filename <- function(name = NULL,
     condition = is.character(c(name, filename))
   )
 
+  if (has_fileext(name)) {
+    filename <- name
+    name <- NULL
+  }
+
   # If filename is provided, remove file extension (if filename includes the
   # extension)
   if (!is.null(filename)) {
@@ -52,8 +72,7 @@ make_filename <- function(name = NULL,
   # width
   if (!is.null(name)) {
     cli_warn_ifnot(
-      "The provided {.arg filename} can't be used
-      if {.arg name} is also provided.",
+      "{.arg filename} is ignored if a {.arg name} argument is provided.",
       condition = is.null(filename)
     )
 
@@ -66,6 +85,12 @@ make_filename <- function(name = NULL,
         use_clean_names = TRUE,
         use_make_names = FALSE
       )
+  } else {
+    cli_warn_ifnot(
+      "{.arg label} is ignored if {.arg name} is not provided
+      (or if {.arg name} contains a file extension).",
+      condition = is.null(label)
+    )
   }
 
   # Apply prefix and postfix to the filename

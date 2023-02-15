@@ -13,7 +13,7 @@
 #' @param postfix Character string or character vector to add to string
 #'   parameter as a postfix.
 #' @param sep Separator character passed as the collapse parameter of [paste()].
-#' @inheritParams str_pad_digits
+#' @inheritParams isstatic::str_pad_digits
 #' @param use_clean_names If `TRUE`, prefix, postfix, and string are all
 #'   converted to snake case with [janitor::make_clean_names()].
 #' @inheritParams janitor::make_clean_names
@@ -32,9 +32,9 @@ str_affix <- function(string = NULL,
                       use_make_names = TRUE,
                       ...) {
   cli_abort_ifnot(
-    "{.arg prefix} must be a {.cls character} object or NULL." = is.character(prefix) || is.null(prefix),
-    "{.arg string} must be a {.cls character} object or NULL." = is.character(string) || is.null(string),
-    "{.arg postfix}  must be a {.cls character} object or NULL." = is.character(postfix) || is.null(postfix)
+    "{.arg string} must be a {.cls character} or NULL." = is.character(string) || is.null(string),
+    "{.arg prefix}  must be a {.cls character}, {.cls Date}, {.cls POSIXct}, or NULL." = is.null(prefix) || rlang::inherits_any(prefix, c("character", "Date", "POSIXct")),
+    "{.arg postfix}  must be a {.cls character}, {.cls Date}, {.cls POSIXct}, or NULL." = is.null(postfix) || rlang::inherits_any(postfix, c("character", "Date", "POSIXct"))
   )
 
   string <- str_pad_digits(string, pad = pad, width = width)
@@ -55,15 +55,19 @@ str_affix <- function(string = NULL,
       use_make_names = use_make_names,
       ...
     )
-  string <-
-    str_prefix(string,
-      postfix,
-      is_postfix = TRUE,
-      sep = sep,
-      use_clean_names = use_clean_names,
-      use_make_names = use_make_names,
-      ...
-    )
+
+  if (!is.null(postfix)) {
+    string <-
+      str_prefix(
+        string,
+        postfix,
+        is_postfix = TRUE,
+        sep = sep,
+        use_clean_names = use_clean_names,
+        use_make_names = use_make_names,
+        ...
+      )
+  }
 
   # Remove double separators
   gsub(paste0(sep, "{2}"), sep, string)
@@ -83,7 +87,7 @@ str_prefix <- function(string = NULL,
                        prefix = NULL,
                        sep = "_",
                        is_postfix = FALSE,
-                       date.format = "%F",
+                       date.format = "%Y-%m-%d",
                        time.format = "%Y-%m-%d_%I-%M-%S_%p",
                        use_clean_names = TRUE,
                        case = "snake",
@@ -104,10 +108,14 @@ str_prefix <- function(string = NULL,
 
   if (inherits(prefix, "Date")) {
     prefix <- format(prefix, date.format)
+    prefix <- str_replace_all(tolower(prefix), " ", "-")
+    use_clean_names <- FALSE
   }
 
   if (inherits(prefix, "POSIXct")) {
     prefix <- format(prefix, time.format)
+    prefix <- str_replace_all(tolower(prefix), " ", "-")
+    use_clean_names <- FALSE
   }
 
   if (use_clean_names) {
