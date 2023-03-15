@@ -11,10 +11,15 @@
 #'   [janitor::make_clean_names()]. The label is designed to identify the area
 #'   or other shared characteristics across multiple data files, maps, or plots.
 #'   label is ignored if name is NULL or if name includes a file extension.
-#' @param fileext File type or extension.
-#' @param filename File name; if file name is `NULL`, name and file type are
-#'   both required.
-#' @param path Path to file or data directory.
+#' @param fileext File type or extension. Optional if filename or path include a
+#'   file extension.
+#' @param filename File name; if filename is `NULL` and path does not include a
+#'   file extension, name and file extension are both required.
+#' @param path Path to file or data directory. Optional. If path includes a file
+#'   extension and filename and fileext are both `NULL`, the filename and
+#'   extension included with path will be used instead. If multiple file
+#'   extensions are provided to filename, path, or fileext, `make_filename()`
+#'   will abort.
 #' @param prefix File name prefix. "date" adds a date prefix, "time" adds a
 #'   date/time prefix; defaults to `NULL`.
 #' @inheritParams isstatic::str_pad_digits
@@ -25,6 +30,11 @@
 #' @inheritParams isstatic::str_increment_digits
 #' @family read_write
 #' @examples
+#'
+#' make_filename(
+#'   filename = "image.jpeg"
+#' )
+#'
 #' make_filename(
 #'   name = "plot",
 #'   label = "Group a",
@@ -35,6 +45,12 @@
 #'   name = "plot",
 #'   prefix = "date",
 #'   fileext = "png"
+#' )
+#'
+#' make_filename(
+#'   name = "map_1",
+#'   increment = TRUE,
+#'   fileext = "geojson"
 #' )
 #'
 #' @export
@@ -52,14 +68,18 @@ make_filename <- function(name = NULL,
                           create = TRUE,
                           increment = NULL) {
   cli_abort_ifnot(
-    "{.arg name} or {.arg filename} must be provided.",
-    condition = is.character(c(name, filename))
+    "{.arg name}, {.arg filename}, or a file {.arg path} must be provided.",
+    condition = is.character(c(name, filename, path))
   )
 
   if (has_fileext(name)) {
     filename <- name
     name <- NULL
+  } else if (is.null(name) && has_fileext(path)) {
+    filename <- filename %||% basename(path)
   }
+
+  check_fileext(filename, path, fileext)
 
   # If filename is provided, remove file extension (if filename includes the
   # extension)

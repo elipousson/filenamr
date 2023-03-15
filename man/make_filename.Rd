@@ -31,12 +31,17 @@ assumed that the filename has been provided as the name parameter.}
 or other shared characteristics across multiple data files, maps, or plots.
 label is ignored if name is NULL or if name includes a file extension.}
 
-\item{fileext}{File type or extension.}
+\item{fileext}{File type or extension. Optional if filename or path include a
+file extension.}
 
-\item{filename}{File name; if file name is \code{NULL}, name and file type are
-both required.}
+\item{filename}{File name; if filename is \code{NULL} and path does not include a
+file extension, name and file extension are both required.}
 
-\item{path}{Path to file or data directory.}
+\item{path}{Path to file or data directory. Optional. If path includes a file
+extension and filename and fileext are both \code{NULL}, the filename and
+extension included with path will be used instead. If multiple file
+extensions are provided to filename, path, or fileext, \code{make_filename()}
+will abort.}
 
 \item{prefix}{File name prefix. "date" adds a date prefix, "time" adds a
 date/time prefix; defaults to \code{NULL}.}
@@ -67,6 +72,11 @@ A helper function to create consistent file names for plots created with data
 files.
 }
 \examples{
+
+make_filename(
+  filename = "image.jpeg"
+)
+
 make_filename(
   name = "plot",
   label = "Group a",
@@ -77,6 +87,12 @@ make_filename(
   name = "plot",
   prefix = "date",
   fileext = "png"
+)
+
+make_filename(
+  name = "map_1",
+  increment = TRUE,
+  fileext = "geojson"
 )
 
 }

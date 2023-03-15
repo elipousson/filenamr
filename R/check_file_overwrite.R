@@ -1,7 +1,9 @@
 #' Check if a file exists and remove file or error
 #'
-#' @param filename File name, Default: `NULL`
-#' @param path File path, Default: `NULL`
+#' The filename or path must include a single file extension.
+#'
+#' @param filename File name, Default: `NULL`. Optional if path is supplied.
+#' @param path File path, Default: `NULL`. Optional if filename is supplied.
 #' @param overwrite If `TRUE`, remove a file with the same name and path
 #' @param quiet If `TRUE`, suppress informational messages, Default: `FALSE`
 #' @param ask If `TRUE`, overwrite is `FALSE`, and session is interactive, ask
@@ -16,23 +18,19 @@ check_file_overwrite <- function(filename = NULL,
                                  quiet = FALSE,
                                  ask = TRUE,
                                  call = caller_env()) {
-  filename <- filename %||% basename(path)
+  check_fileext(filename = filename, path = path, call = call)
+
   filepath <- filename
 
   if (!is.null(path)) {
     if (has_fileext(path) && is.null(filename)) {
+      filename <- basename(path)
       filepath <- path
       path <- dirname(path)
     } else {
       filepath <- file.path(path, filename)
     }
   }
-
-  cli_abort_ifnot(
-    "{.arg filename} or {.arg path} must include a valid file extension.",
-    condition = has_fileext(filepath),
-    call = call
-  )
 
   if (file.exists(filepath)) {
     if (!overwrite && ask && rlang::is_interactive()) {
@@ -66,4 +64,23 @@ check_file_overwrite <- function(filename = NULL,
   }
 
   invisible(NULL)
+}
+
+#' @keywords internal check
+#' @noRd
+check_fileext <- function(filename = NULL,
+                           path = NULL,
+                           fileext = NULL,
+                           call = parent.frame()) {
+  if (!is.null(fileext)) {
+    return(invisible(NULL))
+  }
+
+  fileext_check <- c(has_fileext(filename), has_fileext(path))
+
+  cli_abort_ifnot(
+    message = "{.arg filename} or {.arg path} must include a single valid file extension.",
+    condition = any(fileext_check) && !all(fileext_check),
+    call = call
+  )
 }

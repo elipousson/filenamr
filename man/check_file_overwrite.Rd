@@ -14,9 +14,9 @@ check_file_overwrite(
 )
 }
 \arguments{
-\item{filename}{File name, Default: \code{NULL}}
+\item{filename}{File name, Default: \code{NULL}. Optional if path is supplied.}
 
-\item{path}{File path, Default: \code{NULL}}
+\item{path}{File path, Default: \code{NULL}. Optional if filename is supplied.}
 
 \item{overwrite}{If \code{TRUE}, remove a file with the same name and path}
 
@@ -28,5 +28,5 @@ if user wants to overwrite the file. Default: \code{TRUE}}
 \item{call}{Passed to \code{\link[=cli_abort]{cli_abort()}}, Default: \code{\link[=caller_env]{caller_env()}}}
 }
 \description{
-Check if a file exists and remove file or error
+The filename or path must include a single file extension.
 }
