@@ -12,6 +12,8 @@ License: MIT + file LICENSE
 URL: https://github.com/elipousson/filenamr,
     https://elipousson.github.io/filenamr/
 BugReports: https://github.com/elipousson/filenamr/issues
+Depends: 
+    R (>= 2.10)
 Imports: 
     cli,
     cliExtras (>= 0.1.0),
@@ -25,7 +27,8 @@ Suggests:
     purrr,
     rappdirs,
     sf,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    withr
 Remotes: 
     elipousson/cliExtras,
     JoshOBrien/exiftoolr
@@ -34,5 +37,3 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-Depends: 
-    R (>= 2.10)

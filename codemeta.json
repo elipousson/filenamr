@@ -117,6 +117,18 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "sf",
+      "name": "sf",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=sf"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "testthat",
       "name": "testthat",
       "version": ">= 3.0.0",
@@ -127,10 +139,28 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=testthat"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "withr",
+      "name": "withr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=withr"
     }
   ],
   "softwareRequirements": {
     "1": {
+      "@type": "SoftwareApplication",
+      "identifier": "R",
+      "name": "R",
+      "version": ">= 2.10"
+    },
+    "2": {
       "@type": "SoftwareApplication",
       "identifier": "cli",
       "name": "cli",
@@ -142,14 +172,14 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=cli"
     },
-    "2": {
+    "3": {
       "@type": "SoftwareApplication",
       "identifier": "cliExtras",
       "name": "cliExtras",
       "version": ">= 0.1.0",
       "sameAs": "https://github.com/elipousson/cliExtras"
     },
-    "3": {
+    "4": {
       "@type": "SoftwareApplication",
       "identifier": "glue",
       "name": "glue",
@@ -161,7 +191,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=glue"
     },
-    "4": {
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "rlang",
       "name": "rlang",
@@ -175,7 +205,8 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "57.847KB",
+  "fileSize": "71.212KB",
   "readme": "https://github.com/elipousson/filenamr/blob/main/README.md",
-  "contIntegration": "https://app.codecov.io/gh/elipousson/filenamr?branch=main"
+  "contIntegration": "https://app.codecov.io/gh/elipousson/filenamr?branch=main",
+  "keywords": ["file-naming", "r-package"]
 }

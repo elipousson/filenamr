@@ -28,6 +28,8 @@
 #'   [get_data_dir()]; defaults to `FALSE`.
 #' @inheritParams get_data_dir
 #' @inheritParams isstatic::str_increment_digits
+#' @param allow_no_fileext If `FALSE`, error if a file extension is not supplied
+#'   through the filename, path, or fileext parameter. Defaults to `TRUE`.
 #' @family read_write
 #' @examples
 #'
@@ -66,7 +68,8 @@ make_filename <- function(name = NULL,
                           cache = FALSE,
                           appname = NULL,
                           create = TRUE,
-                          increment = NULL) {
+                          increment = NULL,
+                          allow_no_fileext = TRUE) {
   cli_abort_ifnot(
     "{.arg name}, {.arg filename}, or a file {.arg path} must be provided.",
     condition = is.character(c(name, filename, path))
@@ -79,7 +82,9 @@ make_filename <- function(name = NULL,
     filename <- filename %||% basename(path)
   }
 
-  check_fileext(filename, path, fileext)
+  if (isFALSE(allow_no_fileext)) {
+    check_fileext(filename, path, fileext)
+  }
 
   # If filename is provided, remove file extension (if filename includes the
   # extension)

@@ -16,9 +16,9 @@ knitr::opts_chunk$set(
 # filenamr
 
 <!-- badges: start -->
-`r badger::badge_lifecycle("experimental")`
-`r badger::badge_license("MIT", "blue", "https://cran.r-project.org/web/licenses/MIT")`
-`r badger::badge_repostatus("active")`
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+ [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Codecov test coverage](https://codecov.io/gh/elipousson/filenamr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/elipousson/filenamr?branch=main)
 <!-- badges: end -->
 

@@ -17,7 +17,8 @@ make_filename(
   cache = FALSE,
   appname = NULL,
   create = TRUE,
-  increment = NULL
+  increment = NULL,
+  allow_no_fileext = TRUE
 )
 }
 \arguments{
@@ -66,6 +67,9 @@ new directory will be created.}
 \item{increment}{If \code{TRUE}, increment digits in string by 1. If numeric,
 increment digits in string by value. If \code{NULL}, 0, or if no digits are
 present in string, return string as is.}
+
+\item{allow_no_fileext}{If \code{FALSE}, error if a file extension is not supplied
+through the filename, path, or fileext parameter. Defaults to \code{TRUE}.}
 }
 \description{
 A helper function to create consistent file names for plots created with data
