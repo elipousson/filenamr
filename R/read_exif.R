@@ -34,6 +34,8 @@ exif_xwalk <-
 #' @param fileext The file extension or file type; defaults to `NULL`.
 #' @param tags Optional list of EXIF tags to read from files. Must include GPS
 #'   tags to create an `sf` object.
+#' @param geometry If `TRUE`, convert the data.frame with coordinates to a sf
+#'   object using [sf::st_as_sf()].
 #' @param ... Additional EXIF tags to pass to [exiftoolr::exif_read]
 #' @export
 #' @importFrom cli cli_abort cli_warn
@@ -50,14 +52,17 @@ read_exif <- function(path = NULL,
 
   # FIXME: This is a partial list of filetypes that support GPS EXIF metadata
   # fileext <- match.arg(fileext, c("jpg", "jpeg", "png", "tiff", "pdf"))
+  geo_tags <- c("GPSLatitude", "GPSLongitude")
 
-  if (geometry && !all(c("GPSLatitude", "GPSLongitude") %in% tags)) {
+  if (geometry && !all(geo_tags %in% tags)) {
     cli_warn(
       c("{.arg tags} must be include {.val {c('GPSLatitude', 'GPSLongitude')}}
         to create a {.cls sf} object from EXIF metadata.",
-        "i" = "The provided {.arg tags} are {.val {tags}}."
+        "*" = "Adding required tags to {.arg tags}."
       )
     )
+
+    tags <- c(tags, geo_tags)
   }
 
   # FIXME: Figure out how to append path to the end of the table not the

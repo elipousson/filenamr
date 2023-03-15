@@ -40,6 +40,9 @@ returned data will match the crs of the bbox.}
 \item{tags}{Optional list of EXIF tags to read from files. Must include GPS
 tags to create an \code{sf} object.}
 
+\item{geometry}{If \code{TRUE}, convert the data.frame with coordinates to a sf
+object using \code{\link[sf:st_as_sf]{sf::st_as_sf()}}.}
+
 \item{...}{Additional EXIF tags to pass to \link[exiftoolr:exif_read]{exiftoolr::exif_read}}
 
 \item{title}{Title to add to file metadata with exiftoolr, Default: \code{NULL}.}
