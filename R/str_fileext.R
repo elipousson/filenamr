@@ -5,11 +5,10 @@
 #' - [str_add_fileext()]: Add file type to string
 #' - [str_remove_fileext()]: Remove file type from string
 #' - [str_extract_fileext()]: Extract file type from string
-#' - [has_fileext()]: Does a string have a file extension (optionally
-#' user-defined)?
 #'
 #' @name str_fileext
 #' @param string Character vector
+#' @seealso [isstatic::has_fileext()]
 NULL
 
 #' @name str_add_fileext

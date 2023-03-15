@@ -29,7 +29,8 @@ Functions include:
 \item \code{\link[=str_add_fileext]{str_add_fileext()}}: Add file type to string
 \item \code{\link[=str_remove_fileext]{str_remove_fileext()}}: Remove file type from string
 \item \code{\link[=str_extract_fileext]{str_extract_fileext()}}: Extract file type from string
-\item \code{\link[=has_fileext]{has_fileext()}}: Does a string have a file extension (optionally
-user-defined)?
 }
+}
+\seealso{
+\code{\link[isstatic:has_fileext]{isstatic::has_fileext()}}
 }
