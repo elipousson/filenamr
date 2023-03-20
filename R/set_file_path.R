@@ -8,7 +8,7 @@
 #' @param filename File name. Optional if path is supplied.
 #' @param path File path. Optional if filename is supplied.
 #' @param fileext File extension. If the path supplied using filename and path
-#'   *does not* end with a file extension, filext is used
+#'   *does not* end with a file extension, fileext is used
 #'   as the file extension for the returned path. If the path, *does* end with a
 #'   file extension, and fileext is used to validate the supplied.
 #' @param allow_null If `TRUE`, return `NULL` if filename and path are `NULL`.

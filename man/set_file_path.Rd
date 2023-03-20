@@ -18,7 +18,7 @@ set_file_path(
 \item{path}{File path. Optional if filename is supplied.}
 
 \item{fileext}{File extension. If the path supplied using filename and path
-\emph{does not} end with a file extension, filext is used
+\emph{does not} end with a file extension, fileext is used
 as the file extension for the returned path. If the path, \emph{does} end with a
 file extension, and fileext is used to validate the supplied.}
 
