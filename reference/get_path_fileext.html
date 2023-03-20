@@ -12,7 +12,7 @@ forward without checking it."><!-- mathjax --><script src="https://cdnjs.cloudfl
     
     <a class="navbar-brand me-2" href="../index.html">filenamr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9001</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,13 +54,20 @@ forward without checking it.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_path_fileext</span><span class="op">(</span><span class="va">path</span>, fileext <span class="op">=</span> <span class="cn">NULL</span>, n <span class="op">=</span> <span class="fl">1</span>, quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_path_fileext</span><span class="op">(</span></span>
+<span>  <span class="va">path</span>,</span>
+<span>  fileext <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  n <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>path</dt>
-<dd><p>A valid directory or file path.</p></dd>
+<dd><p>A single directory or file path. The directory or file must
+exist.</p></dd>
 
 
 <dt>fileext</dt>

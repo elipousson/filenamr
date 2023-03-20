@@ -22,6 +22,9 @@
     <loc>https://elipousson.github.io/filenamr/reference/check_file_overwrite.html</loc>
   </url>
   <url>
+    <loc>https://elipousson.github.io/filenamr/reference/check_path_fileext.html</loc>
+  </url>
+  <url>
     <loc>https://elipousson.github.io/filenamr/reference/default_tags.html</loc>
   </url>
   <url>
@@ -46,9 +49,9 @@
     <loc>https://elipousson.github.io/filenamr/reference/read_exif.html</loc>
   </url>
   <url>
-    <loc>https://elipousson.github.io/filenamr/reference/str_affix.html</loc>
+    <loc>https://elipousson.github.io/filenamr/reference/set_file_path.html</loc>
   </url>
   <url>
-    <loc>https://elipousson.github.io/filenamr/reference/str_fileext.html</loc>
+    <loc>https://elipousson.github.io/filenamr/reference/str_affix.html</loc>
   </url>
 </urlset>

@@ -14,7 +14,7 @@ optionally create a new directory at the provided path location."><!-- mathjax -
     
     <a class="navbar-brand me-2" href="../index.html">filenamr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9001</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,7 @@ optionally create a new directory at the provided path location.</p>
 <span>  create <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  ask <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  appname <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  null.ok <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  allow_null <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -96,9 +96,9 @@ create directory if the provided directory does not exist.</p></dd>
 <dd><p>Passed to <code><a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">rappdirs::user_cache_dir()</a></code></p></dd>
 
 
-<dt>null.ok</dt>
-<dd><p>If <code>TRUE</code>, path is <code>NULL</code>, cache is <code>FALSE</code>, return the <code>NULL</code>
-path value; defaults to <code>TRUE</code>.</p></dd>
+<dt>allow_null</dt>
+<dd><p>If <code>TRUE</code>, path is <code>NULL</code>, cache is <code>FALSE</code>, return the
+<code>NULL</code> path value; defaults to <code>TRUE</code>.</p></dd>
 
 
 <dt>quiet</dt>
