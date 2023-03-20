@@ -17,8 +17,7 @@ make_filename(
   cache = FALSE,
   appname = NULL,
   create = TRUE,
-  increment = NULL,
-  allow_no_fileext = TRUE
+  increment = NULL
 )
 }
 \arguments{

@@ -68,10 +68,9 @@ make_filename <- function(name = NULL,
                           cache = FALSE,
                           appname = NULL,
                           create = TRUE,
-                          increment = NULL,
-                          allow_no_fileext = TRUE) {
+                          increment = NULL) {
   cli_abort_ifnot(
-    "{.arg name}, {.arg filename}, or a file {.arg path} must be provided.",
+    "{.arg name}, {.arg filename}, or {.arg path} must be provided.",
     condition = is.character(c(name, filename, path))
   )
 
@@ -80,10 +79,7 @@ make_filename <- function(name = NULL,
     name <- NULL
   } else if (is.null(name) && has_fileext(path)) {
     filename <- filename %||% basename(path)
-  }
-
-  if (isFALSE(allow_no_fileext)) {
-    check_fileext(filename, path, fileext)
+    path <- path_dir(path)
   }
 
   # If filename is provided, remove file extension (if filename includes the
@@ -129,6 +125,8 @@ make_filename <- function(name = NULL,
       use_make_names = FALSE
     )
 
+  filename <- str_increment_digits(filename, increment = increment)
+
   # Append fileext
   filename <-
     str_add_fileext(
@@ -142,14 +140,25 @@ make_filename <- function(name = NULL,
       cache = cache,
       create = create,
       appname = appname,
-      null.ok = TRUE
+      allow_null = TRUE
     )
 
-  filename <- str_increment_digits(filename, increment = increment)
+  file_path(path, filename)
+}
 
+#' Alternative to dirname()
+#'
+#' @noRd
+path_dir <- function(path = NULL) {
   if (is.null(path)) {
-    return(filename)
+    return(path)
   }
 
-  file.path(path, filename)
+  path <- dirname(path)
+
+  if (path == ".") {
+    path <- NULL
+  }
+
+  path
 }
