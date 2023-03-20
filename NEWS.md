@@ -5,7 +5,6 @@
 * Export `check_path_fileext()` function.
 * Remove `str_fileext` functions (moved to [{isstatic}](https://github.com/elipousson/isstatic) package)
 
-
 # filenamr 0.1.0.9000 (2023-03-15)
 
 * Initial release.
