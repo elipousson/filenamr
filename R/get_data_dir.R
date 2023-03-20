@@ -13,34 +13,27 @@
 #'   should be created. If the session not interactive and create is `TRUE`, a
 #'   new directory will be created.
 #' @param appname Passed to [rappdirs::user_cache_dir()]
-#' @param null.ok If `TRUE`, path is `NULL`, cache is `FALSE`, return the `NULL`
-#'   path value; defaults to `TRUE`.
+#' @param allow_null If `TRUE`, path is `NULL`, cache is `FALSE`, return the
+#'   `NULL` path value; defaults to `TRUE`.
 #' @param ask If `TRUE`, create is `FALSE`, and session is interactive, ask to
 #'   create directory if the provided directory does not exist.
 #' @param quiet If `TRUE`, suppress informational messages.
 #' @export
-#' @importFrom rlang is_interactive
+#' @importFrom cliExtras cli_yesno
+#' @importFrom rlang check_installed is_interactive
+#' @importFrom rappdirs user_cache_dir
+#' @importFrom cli cli_alert_warning cli_alert_success
 get_data_dir <- function(path = NULL,
                          cache = FALSE,
                          create = TRUE,
                          ask = TRUE,
                          appname = NULL,
-                         null.ok = TRUE,
+                         allow_null = TRUE,
                          quiet = FALSE) {
   if (quiet) {
-    return(
-      suppressWarnings(
-        suppressMessages(
-          get_data_dir(
-            path,
-            cache,
-            create,
-            appname,
-            null.ok
-          )
-        )
-      )
-    )
+    existing_handler <- getOption("cli.default_handler")
+    options("cli.default_handler" = suppressMessages)
+    on.exit(options("cli.default_handler" = existing_handler), add = TRUE)
   }
 
   if (cache) {
@@ -53,15 +46,19 @@ get_data_dir <- function(path = NULL,
   }
 
   if (is.null(path)) {
-    if (null.ok) {
+    if (allow_null) {
       return(invisible(path))
     }
 
-    cli_abort("{.arg path} can't be {.val NULL} when {.code null.ok = FALSE}")
+    cli_abort(
+      "{.arg path} can't be {.val NULL} when {.code allow_null = FALSE}"
+    )
   }
 
   if (!create) {
-    cli_warn("The provided {.arg path} {.file {path}} can't be found.")
+    cli::cli_warn(
+      "{.arg path} {.file {path}} can't be found."
+    )
     return(path)
   }
 
@@ -69,19 +66,21 @@ get_data_dir <- function(path = NULL,
     create <-
       cliExtras::cli_yesno(
         c(
-          "x" = "The directory {.file {path}} does not exist.",
+          "x" = "The directory {.file {path}} can't be found.",
           ">" = "Do you want to create a directory at this location?"
         )
       )
   }
 
   if (!create) {
+    cli::cli_alert_warning(
+      "No directory created at {.file {path}}"
+    )
     return(invisible(NULL))
   }
 
-  cli_inform_ifnot(
-    c("v" = "New directory created at {.file {path}}"),
-    condition = quiet
+  cli::cli_alert_success(
+    "New directory created at {.file {path}}"
   )
 
   dir.create(path)
@@ -93,7 +92,8 @@ get_data_dir <- function(path = NULL,
 #' If fileext is provided, [get_path_fileext()] will pass the file extension
 #' forward without checking it.
 #'
-#' @param path A valid directory or file path.
+#' @param path A single directory or file path. The directory or file must
+#'   exist.
 #' @param fileext If not `NULL`, function returns file type as is.
 #' @param n Max number of unique file types to return. Returns warning and n
 #'   most common file types if path has more than n unique file types.
@@ -102,60 +102,89 @@ get_data_dir <- function(path = NULL,
 get_path_fileext <- function(path,
                              fileext = NULL,
                              n = 1,
-                             quiet = FALSE) {
+                             quiet = FALSE,
+                             call = caller_env()) {
+  if (quiet) {
+    existing_handler <- getOption("cli.default_handler")
+    options("cli.default_handler" = suppressMessages)
+    on.exit(options("cli.default_handler" = existing_handler), add = TRUE)
+  }
+
   if (!is.null(fileext)) {
+    check_string(fileext)
     return(fileext)
   }
 
-  file_list <- NULL
-
-  if (dir.exists(path)) {
-    file_list <- list.files(path)
-  } else if (file.exists(path)) {
-    file_list <- path
-  }
-
-  cli_abort_ifnot(
-    c("A valid file or directory {.arg path} must be provided.",
-      "i" = "The provided {.arg path} {.file {path}} does not exist."
-    ),
-    condition = !is.null(file_list)
-  )
-
-  fileext <- str_extract_fileext(file_list)
+  fileext <- list_path_fileext(path)
 
   if (length(unique(fileext)) <= n) {
     return(unique(fileext))
   }
 
   # https://stackoverflow.com/questions/17374651/find-the-n-most-common-values-in-a-vector
-  fileext <- names(sort(table(fileext), decreasing = TRUE)[1:n])
+  fileext <- str_n_freq(fileext, n)
 
-  cli_inform_ifnot(
-    c("The directory {.file {path}} has more than {n} unique file extensions.",
-      "i" = "Using {n} most common file extensions{?s}: {.val {fileext}}"
-    ),
-    condition = quiet
+  cli::cli_bullets(
+    c("i" = "{.arg path} {.file {path}} has more than {n} unique file extension{?s}.",
+      "*" = "Returning the {n} most common file extension{?s}: {.val {fileext}}"
+    )
   )
 
   fileext
+}
+
+#' List path file extensions
+#'
+#' @noRd
+list_path_fileext <- function(path, allow_null = FALSE, call = caller_env(), ...) {
+  file_list <- NULL
+  check_string(path, call = call)
+
+  if (dir.exists(path)) {
+    file_list <- list.files(path, ...)
+  } else if (file.exists(path)) {
+    file_list <- path
+  }
+
+  empty_file_list <- (identical(file_list, character(0)) || is.null(file_list))
+
+  if (empty_file_list && isTRUE(allow_null)) {
+    return(invisible(NULL))
+  }
+
+  cli_abort_ifnot(
+    c("A valid file or directory {.arg path} must be supplied.",
+      "i" = "{.arg path} {.path {path}} does not exist."
+    ),
+    condition = isFALSE(empty_file_list)
+  )
+
+  str_extract_fileext(file_list)
 }
 
 #' Get list of files at a path (using a single file type at a time)
 #'
 #' @noRd
 #' @importFrom rlang has_name
-get_path_files <- function(path, fileext = NULL, full.names = TRUE) {
+list_path_filenames <- function(path,
+                                fileext = NULL,
+                                pattern = NULL,
+                                full.names = TRUE,
+                                ...) {
+  rlang::check_required(path)
   if (is.data.frame(path) && rlang::has_name(path, "path")) {
     path <- path[["path"]]
   }
 
   if (all(dir.exists(path))) {
+    pattern <- pattern %||% paste0("\\.", get_path_fileext(path, fileext), "$")
+
     return(
       list.files(
         path = path,
-        pattern = paste0("\\.", get_path_fileext(path, fileext), "$"),
-        full.names = full.names
+        pattern = pattern,
+        full.names = full.names,
+        ...
       )
     )
   } else if (all(file.exists(path))) {

@@ -4,10 +4,17 @@
 \alias{get_path_fileext}
 \title{Get file types or extensions for files at a path}
 \usage{
-get_path_fileext(path, fileext = NULL, n = 1, quiet = FALSE)
+get_path_fileext(
+  path,
+  fileext = NULL,
+  n = 1,
+  quiet = FALSE,
+  call = caller_env()
+)
 }
 \arguments{
-\item{path}{A valid directory or file path.}
+\item{path}{A single directory or file path. The directory or file must
+exist.}
 
 \item{fileext}{If not \code{NULL}, function returns file type as is.}
 

@@ -18,15 +18,13 @@ check_file_overwrite <- function(filename = NULL,
                                  quiet = FALSE,
                                  ask = TRUE,
                                  call = caller_env()) {
-  check_fileext(filename = filename, path = path, call = call)
-
-  filepath <- filename
+  filepath <- set_file_path(filename, path)
 
   if (!is.null(path)) {
     if (has_fileext(path) && is.null(filename)) {
       filename <- basename(path)
       filepath <- path
-      path <- dirname(path)
+      path <- path_dir(path)
     } else {
       filepath <- file.path(path, filename)
     }
@@ -66,21 +64,22 @@ check_file_overwrite <- function(filename = NULL,
   invisible(NULL)
 }
 
-#' @keywords internal check
-#' @noRd
-check_fileext <- function(filename = NULL,
-                           path = NULL,
-                           fileext = NULL,
-                           call = parent.frame()) {
-  if (!is.null(fileext)) {
-    return(invisible(NULL))
-  }
-
-  fileext_check <- c(has_fileext(filename), has_fileext(path))
-
+#' Check if a file path has a file extension
+#'
+#' @param path File path to check. Required.
+#' @param fileext Optional file extension. If `NULL`, path must have a file
+#'   extension. If a character string, path must have a matching file extension.
+#' @inheritParams cliExtras::cli_abort_ifnot
+#' @export
+check_path_fileext <- function(path,
+                               fileext = NULL,
+                               message = "{.arg path} must include a file extension.",
+                               call = parent.frame()) {
+  check_character(path)
+  check_string(fileext, allow_null = TRUE)
   cli_abort_ifnot(
-    message = "{.arg filename} or {.arg path} must include a single valid file extension.",
-    condition = any(fileext_check) && !all(fileext_check),
+    message = message,
+    condition = all(has_fileext(path, fileext)),
     call = call
   )
 }

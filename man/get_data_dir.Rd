@@ -10,7 +10,7 @@ get_data_dir(
   create = TRUE,
   ask = TRUE,
   appname = NULL,
-  null.ok = TRUE,
+  allow_null = TRUE,
   quiet = FALSE
 )
 }
@@ -31,8 +31,8 @@ create directory if the provided directory does not exist.}
 
 \item{appname}{Passed to \code{\link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir()}}}
 
-\item{null.ok}{If \code{TRUE}, path is \code{NULL}, cache is \code{FALSE}, return the \code{NULL}
-path value; defaults to \code{TRUE}.}
+\item{allow_null}{If \code{TRUE}, path is \code{NULL}, cache is \code{FALSE}, return the
+\code{NULL} path value; defaults to \code{TRUE}.}
 
 \item{quiet}{If \code{TRUE}, suppress informational messages.}
 }
