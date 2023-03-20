@@ -36,7 +36,7 @@ exif_xwalk <-
 #'   tags to create an `sf` object.
 #' @param geometry If `TRUE`, convert the data.frame with coordinates to a sf
 #'   object using [sf::st_as_sf()].
-#' @param ... Additional EXIF tags to pass to [exiftoolr::exif_read]
+#' @param ... Additional EXIF tags to pass to [exiftoolr::exif_read()]
 #' @export
 #' @importFrom cli cli_abort cli_warn
 #' @importFrom rlang has_name
@@ -48,7 +48,16 @@ read_exif <- function(path = NULL,
                       ...) {
   rlang::check_installed("exiftoolr")
 
-  path <- get_path_files(path, fileext)
+  filenames <- list_path_filenames(path, fileext)
+
+  if (length(filenames) == 0) {
+    text <- "No files found at {.arg path}: {.path {path}}"
+    if (!is.null(fileext)) {
+      text <- "No {.val {fileext}} files found at {.arg path}: {.path {path}}"
+    }
+    cli::cli_alert_warning(text, wrap = TRUE)
+    return(invisible(NULL))
+  }
 
   # FIXME: This is a partial list of filetypes that support GPS EXIF metadata
   # fileext <- match.arg(fileext, c("jpg", "jpeg", "png", "tiff", "pdf"))
@@ -70,7 +79,7 @@ read_exif <- function(path = NULL,
   data <-
     suppressMessages(
       exiftoolr::exif_read(
-        path,
+        filenames,
         tags = tags
       )
     )
@@ -206,7 +215,7 @@ write_exif <- function(path,
   }
 
   if (!is.null(args)) {
-    path <- get_path_files(path)
+    path <- list_path_filenames(path)
 
     suppressMessages(
       suppressWarnings(

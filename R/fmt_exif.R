@@ -59,7 +59,14 @@ fmt_exif_orientation <- function(data) {
         exif_orientation == 8 ~ "Rotate 270 CW",
         TRUE ~ NA_character_
       ),
-    orientation = as_orientation(img_width / img_height, 0),
+    # FIXME: as_orientation stopped working around 2023-03-20 - check and fix
+    # orientation = as_orientation(img_width / img_height, 0),
+    orientation = dplyr::case_when(
+      (img_width / img_height) > 1 ~ "landscape",
+      (img_width / img_height) < 1 ~ "portrait",
+      (img_width / img_height) == 1 ~ "square",
+      TRUE ~ NA_character_
+    ),
     .after = "exif_orientation"
   )
 }
