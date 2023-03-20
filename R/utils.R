@@ -1,10 +1,10 @@
 # @staticimports pkg:stringstatic
-# str_extract str_replace str_replace_all str_width str_length str_pad
-# str_remove str_detect
+# str_replace_all
 
 # @staticimports pkg:isstatic
-# has_fileext has_all_names as_orientation as_cardinal_bearing str_add_fileext
-# str_remove_fileext str_extract_fileext str_pad_digits str_increment_digits
+# has_fileext file_path has_all_names as_orientation as_cardinal_bearing
+# str_add_fileext str_remove_fileext str_extract_fileext str_pad_digits
+# str_increment_digits is_any
 
 .onLoad <- function(libname, pkgname) {
   utils::data(
