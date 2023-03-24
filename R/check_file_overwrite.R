@@ -18,6 +18,7 @@ check_file_overwrite <- function(filename = NULL,
                                  quiet = FALSE,
                                  ask = TRUE,
                                  call = caller_env()) {
+  cli_quiet(quiet)
   filepath <- set_file_path(filename, path)
 
   if (!is.null(path)) {
@@ -53,9 +54,8 @@ check_file_overwrite <- function(filename = NULL,
       call = call
     )
 
-    cli_inform_ifnot(
-      c("v" = "Removing {.path {filename}}"),
-      condition = quiet
+    cli::cli_alert_success(
+      "Removing {.path {filename}}"
     )
 
     file.remove(filepath)

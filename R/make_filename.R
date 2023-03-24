@@ -67,8 +67,10 @@ make_filename <- function(name = NULL,
                           width = NULL,
                           cache = FALSE,
                           appname = NULL,
+                          pkg = NULL,
                           create = TRUE,
                           increment = NULL) {
+  appname <- appname %||% pkg
   cli_abort_ifnot(
     "{.arg name}, {.arg filename}, or {.arg path} must be provided.",
     condition = is.character(c(name, filename, path))

@@ -16,6 +16,7 @@ make_filename(
   width = NULL,
   cache = FALSE,
   appname = NULL,
+  pkg = NULL,
   create = TRUE,
   increment = NULL
 )
@@ -56,7 +57,8 @@ date/time prefix; defaults to \code{NULL}.}
 \item{cache}{If \code{TRUE}, path is set to the package cache directory using
 \code{\link[=get_data_dir]{get_data_dir()}}; defaults to \code{FALSE}.}
 
-\item{appname}{Passed to \code{\link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir()}}}
+\item{appname, pkg}{pkg is used if appname is NULL. Passed to
+\code{\link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir()}}}
 
 \item{create}{If \code{FALSE} and path does not exist, return path with a warning.
 If \code{TRUE} and \code{\link[rlang:is_interactive]{rlang::is_interactive()}} is \code{TRUE}, ask user if directory

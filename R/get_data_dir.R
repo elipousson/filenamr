@@ -12,14 +12,15 @@
 #'   If `TRUE` and [rlang::is_interactive()] is `TRUE`, ask user if directory
 #'   should be created. If the session not interactive and create is `TRUE`, a
 #'   new directory will be created.
-#' @param appname Passed to [rappdirs::user_cache_dir()]
+#' @param appname,pkg pkg is used if appname is NULL. Passed to
+#'   [rappdirs::user_cache_dir()]
 #' @param allow_null If `TRUE`, path is `NULL`, cache is `FALSE`, return the
 #'   `NULL` path value; defaults to `TRUE`.
 #' @param ask If `TRUE`, create is `FALSE`, and session is interactive, ask to
 #'   create directory if the provided directory does not exist.
 #' @param quiet If `TRUE`, suppress informational messages.
 #' @export
-#' @importFrom cliExtras cli_yesno
+#' @importFrom cliExtras cli_quiet cli_yesno
 #' @importFrom rlang check_installed is_interactive
 #' @importFrom rappdirs user_cache_dir
 #' @importFrom cli cli_alert_warning cli_alert_success
@@ -28,13 +29,11 @@ get_data_dir <- function(path = NULL,
                          create = TRUE,
                          ask = TRUE,
                          appname = NULL,
+                         pkg = NULL,
                          allow_null = TRUE,
                          quiet = FALSE) {
-  if (quiet) {
-    existing_handler <- getOption("cli.default_handler")
-    options("cli.default_handler" = suppressMessages)
-    on.exit(options("cli.default_handler" = existing_handler), add = TRUE)
-  }
+  appname <- appname %||% pkg
+  cli_quiet(quiet)
 
   if (cache) {
     rlang::check_installed("rappdirs")
@@ -104,11 +103,7 @@ get_path_fileext <- function(path,
                              n = 1,
                              quiet = FALSE,
                              call = caller_env()) {
-  if (quiet) {
-    existing_handler <- getOption("cli.default_handler")
-    options("cli.default_handler" = suppressMessages)
-    on.exit(options("cli.default_handler" = existing_handler), add = TRUE)
-  }
+  cli_quiet(quiet)
 
   if (!is.null(fileext)) {
     check_string(fileext)

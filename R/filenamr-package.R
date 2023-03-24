@@ -16,7 +16,7 @@
 #' @importFrom rlang abort
 #' @importFrom cli cli_abort cli_warn cli_inform
 #' @importFrom cliExtras cli_abort_ifnot cli_warn_ifnot cli_inform_ifnot
-#'   cli_yesno
+#'   cli_yesno cli_quiet
 #' @importFrom glue glue
 ## usethis namespace: end
 NULL

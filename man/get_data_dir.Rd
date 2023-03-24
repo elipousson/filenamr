@@ -10,6 +10,7 @@ get_data_dir(
   create = TRUE,
   ask = TRUE,
   appname = NULL,
+  pkg = NULL,
   allow_null = TRUE,
   quiet = FALSE
 )
@@ -29,7 +30,8 @@ new directory will be created.}
 \item{ask}{If \code{TRUE}, create is \code{FALSE}, and session is interactive, ask to
 create directory if the provided directory does not exist.}
 
-\item{appname}{Passed to \code{\link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir()}}}
+\item{appname, pkg}{pkg is used if appname is NULL. Passed to
+\code{\link[rappdirs:user_cache_dir]{rappdirs::user_cache_dir()}}}
 
 \item{allow_null}{If \code{TRUE}, path is \code{NULL}, cache is \code{FALSE}, return the
 \code{NULL} path value; defaults to \code{TRUE}.}
