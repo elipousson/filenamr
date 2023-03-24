@@ -63,6 +63,7 @@ optionally create a new directory at the provided path location.</p>
 <span>  create <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  ask <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  appname <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pkg <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  allow_null <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -92,8 +93,9 @@ new directory will be created.</p></dd>
 create directory if the provided directory does not exist.</p></dd>
 
 
-<dt>appname</dt>
-<dd><p>Passed to <code><a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">rappdirs::user_cache_dir()</a></code></p></dd>
+<dt>appname, pkg</dt>
+<dd><p>pkg is used if appname is NULL. Passed to
+<code><a href="https://rappdirs.r-lib.org/reference/user_cache_dir.html" class="external-link">rappdirs::user_cache_dir()</a></code></p></dd>
 
 
 <dt>allow_null</dt>
