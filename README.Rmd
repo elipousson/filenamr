@@ -29,7 +29,7 @@ The goal of filenamr is to help in creating and modifying file names and paths. 
 You can install the development version of filenamr like so:
 
 ``` r
-pak::pkg_install("elipousson/sfext")
+pak::pkg_install("elipousson/filenamr")
 ```
 
 ## Making file names

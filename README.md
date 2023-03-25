@@ -26,7 +26,7 @@ reading and writing and need some utilities to support this goal.
 You can install the development version of filenamr like so:
 
 ``` r
-pak::pkg_install("elipousson/sfext")
+pak::pkg_install("elipousson/filenamr")
 ```
 
 ## Making file names
@@ -57,7 +57,7 @@ make_filename(
   postfix = "map",
   fileext = "jpeg"
 )
-#> [1] "2023-03-15_baltimore_md_neighborhoods_map.jpeg"
+#> [1] "2023-03-24_baltimore_md_neighborhoods_map.jpeg"
 ```
 
 You can also pass a filename with an extension or path (setting
