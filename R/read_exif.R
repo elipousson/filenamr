@@ -28,23 +28,16 @@ exif_xwalk <-
 #' - keywords: Keywords, IPTC:Keywords, XMP-dc:Subject
 #'
 #' @param path A path to folder or file.
-#' @param bbox Optional bounding box to crop returned file (excluding images
-#'   with location data outside the bounding box). If bbox is provided the
-#'   returned data will match the crs of the bbox.
 #' @param fileext The file extension or file type; defaults to `NULL`.
 #' @param tags Optional list of EXIF tags to read from files. Must include GPS
-#'   tags to create an `sf` object.
-#' @param geometry If `TRUE`, convert the data.frame with coordinates to a sf
-#'   object using [sf::st_as_sf()].
+#'   tags if to create an `sf` object based on the resulting data.frame object.
 #' @param ... Additional EXIF tags to pass to [exiftoolr::exif_read()]
 #' @export
 #' @importFrom cli cli_abort cli_warn
 #' @importFrom rlang has_name
 read_exif <- function(path = NULL,
                       fileext = NULL,
-                      bbox = NULL,
                       tags = getOption("read_exif.tags", default = default_tags),
-                      geometry = FALSE,
                       ...) {
   rlang::check_installed("exiftoolr")
 
@@ -61,18 +54,6 @@ read_exif <- function(path = NULL,
 
   # FIXME: This is a partial list of filetypes that support GPS EXIF metadata
   # fileext <- match.arg(fileext, c("jpg", "jpeg", "png", "tiff", "pdf"))
-  geo_tags <- c("GPSLatitude", "GPSLongitude")
-
-  if (geometry && !all(geo_tags %in% tags)) {
-    cli_warn(
-      c("{.arg tags} must be include {.val {c('GPSLatitude', 'GPSLongitude')}}
-        to create a {.cls sf} object from EXIF metadata.",
-        "*" = "Adding required tags to {.arg tags}."
-      )
-    )
-
-    tags <- c(tags, geo_tags)
-  }
 
   # FIXME: Figure out how to append path to the end of the table not the
   # beginning
@@ -88,7 +69,7 @@ read_exif <- function(path = NULL,
 }
 
 #' @noRd
-fmt_exif_data <- function(data, geometry = FALSE) {
+fmt_exif_data <- function(data) {
   rlang::check_installed("dplyr")
   rlang::check_installed("janitor")
 
@@ -114,17 +95,6 @@ fmt_exif_data <- function(data, geometry = FALSE) {
 
   data <- fmt_exif_direction(data)
 
-  if (geometry) {
-    rlang::check_installed("sf")
-
-    data <-
-      sf::st_as_sf(
-        data,
-        coords = c("lon", "lat"),
-        crs = 4326
-      )
-  }
-
   data
 }
 
@@ -146,6 +116,8 @@ fmt_exif_data <- function(data, geometry = FALSE) {
 #' @param append_keywords If `TRUE`, append keywords, if `FALSE`, replace
 #'   keywords in file metadata.
 #' @export
+#' @importFrom rlang check_installed
+#' @importFrom cliExtras cli_list_files
 write_exif <- function(path,
                        fileext = NULL,
                        title = NULL,
@@ -214,21 +186,38 @@ write_exif <- function(path,
     }
   }
 
-  if (!is.null(args)) {
-    path <- list_path_filenames(path)
+  if (is.null(args)) {
+    cli::cli_abort(
+      "{.arg args} must be provided."
+    )
+  }
 
-    suppressMessages(
-      suppressWarnings(
-        exiftoolr::exif_call(
-          args = args,
-          path = path,
-          quiet = TRUE
-        )
+  if (all(dir.exists(path))) {
+    files <- list_path_filenames(path, fileext = fileext)
+  } else {
+
+    if (!all(is_file(path))) {
+      cli::cli_abort("")
+    }
+
+    files <- path
+  }
+
+  suppressMessages(
+    suppressWarnings(
+      exiftoolr::exif_call(
+        args = args,
+        path = path,
+        quiet = TRUE
       )
     )
+  )
 
-    cliExtras::cli_paths(path, "Updated EXIF metadata for")
-  }
+  cliExtras::cli_list_files(
+    files = files,
+    text = c("v" = "Updated EXIF metadata for {length(files)} file{?s}:"),
+    pattern = pattern
+  )
 }
 
 

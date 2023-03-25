@@ -9,9 +9,7 @@ EXIF metadata to image files}
 read_exif(
   path = NULL,
   fileext = NULL,
-  bbox = NULL,
   tags = getOption("read_exif.tags", default = default_tags),
-  geometry = FALSE,
   ...
 )
 
@@ -33,15 +31,8 @@ write_exif(
 
 \item{fileext}{The file extension or file type; defaults to \code{NULL}.}
 
-\item{bbox}{Optional bounding box to crop returned file (excluding images
-with location data outside the bounding box). If bbox is provided the
-returned data will match the crs of the bbox.}
-
 \item{tags}{Optional list of EXIF tags to read from files. Must include GPS
-tags to create an \code{sf} object.}
-
-\item{geometry}{If \code{TRUE}, convert the data.frame with coordinates to a sf
-object using \code{\link[sf:st_as_sf]{sf::st_as_sf()}}.}
+tags if to create an \code{sf} object based on the resulting data.frame object.}
 
 \item{...}{Additional EXIF tags to pass to \code{\link[exiftoolr:exif_read]{exiftoolr::exif_read()}}}
 
