@@ -8,7 +8,7 @@ check_path_fileext(
   path,
   fileext = NULL,
   message = "{.arg path} must include a file extension.",
-  call = parent.frame()
+  call = caller_env()
 )
 }
 \arguments{

@@ -6,16 +6,18 @@
 #'   cardinal bearing is added to a column named "img_cardinal_wind".
 #' @param winds Number of winds to use for results (4, 8, or 16).
 #' @param .after Column name passed to .after parameter of [dplyr::mutate()].
+#' @inheritParams rlang::args_error_context
 #' @export
 #' @importFrom rlang has_name
-fmt_exif_direction <- function(data, winds = 8, .after = "img_direction") {
+fmt_exif_direction <- function(data, winds = 8, .after = "img_direction", call = caller_env()) {
   if (is.character(data)) {
     return(as_cardinal_bearing(data, winds))
   }
 
   cli_abort_ifnot(
     "{.arg data} must be a {.cls character} or {.cls data.frame} object.",
-    condition = is.data.frame(data)
+    condition = is.data.frame(data),
+    call = call
   )
 
   if (!rlang::has_name(data, c("img_direction"))) {

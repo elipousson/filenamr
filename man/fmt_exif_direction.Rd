@@ -4,7 +4,12 @@
 \alias{fmt_exif_direction}
 \title{Format a data.frame column as a cardinal direction in degrees and wind direction}
 \usage{
-fmt_exif_direction(data, winds = 8, .after = "img_direction")
+fmt_exif_direction(
+  data,
+  winds = 8,
+  .after = "img_direction",
+  call = caller_env()
+)
 }
 \arguments{
 \item{data}{A data.frame or character vector to format with
@@ -15,6 +20,11 @@ cardinal bearing is added to a column named "img_cardinal_wind".}
 \item{winds}{Number of winds to use for results (4, 8, or 16).}
 
 \item{.after}{Column name passed to .after parameter of \code{\link[dplyr:mutate]{dplyr::mutate()}}.}
+
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 }
 \description{
 Format a data.frame column as a cardinal direction in degrees and wind direction

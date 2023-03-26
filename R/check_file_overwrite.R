@@ -8,7 +8,7 @@
 #' @param quiet If `TRUE`, suppress informational messages, Default: `FALSE`
 #' @param ask If `TRUE`, overwrite is `FALSE`, and session is interactive, ask
 #'   if user wants to overwrite the file. Default: `TRUE`
-#' @param call Passed to [cli_abort()], Default: [caller_env()]
+#' @inheritParams rlang::args_error_context
 #' @rdname check_file_overwrite
 #' @export
 #' @importFrom rlang caller_env is_interactive
@@ -74,9 +74,9 @@ check_file_overwrite <- function(filename = NULL,
 check_path_fileext <- function(path,
                                fileext = NULL,
                                message = "{.arg path} must include a file extension.",
-                               call = parent.frame()) {
-  check_character(path)
-  check_string(fileext, allow_null = TRUE)
+                               call = caller_env()) {
+  check_character(path, call = call)
+  check_string(fileext, allow_null = TRUE, call = call)
   cli_abort_ifnot(
     message = message,
     condition = all(has_fileext(path, fileext)),

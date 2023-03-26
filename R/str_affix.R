@@ -17,6 +17,7 @@
 #' @param use_clean_names If `TRUE`, prefix, postfix, and string are all
 #'   converted to snake case with [janitor::make_clean_names()].
 #' @inheritParams janitor::make_clean_names
+#' @inheritParams rlang::args_error_context
 #' @name str_affix
 #' @rdname str_affix
 #' @export
@@ -30,11 +31,13 @@ str_affix <- function(string = NULL,
                       case = "snake",
                       replace = c(`'` = "", `"` = "", `%` = "_pct_", `#` = "_num_"),
                       use_make_names = TRUE,
+                      call = caller_env(),
                       ...) {
   cli_abort_ifnot(
     "{.arg string} must be a {.cls character} or NULL." = is.character(string) || is.null(string),
     "{.arg prefix}  must be a {.cls character}, {.cls Date}, {.cls POSIXct}, or NULL." = is.null(prefix) || rlang::inherits_any(prefix, c("character", "Date", "POSIXct")),
-    "{.arg postfix}  must be a {.cls character}, {.cls Date}, {.cls POSIXct}, or NULL." = is.null(postfix) || rlang::inherits_any(postfix, c("character", "Date", "POSIXct"))
+    "{.arg postfix}  must be a {.cls character}, {.cls Date}, {.cls POSIXct}, or NULL." = is.null(postfix) || rlang::inherits_any(postfix, c("character", "Date", "POSIXct")),
+    call = call
   )
 
   string <- str_pad_digits(string, pad = pad, width = width)

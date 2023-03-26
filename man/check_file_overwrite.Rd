@@ -25,7 +25,10 @@ check_file_overwrite(
 \item{ask}{If \code{TRUE}, overwrite is \code{FALSE}, and session is interactive, ask
 if user wants to overwrite the file. Default: \code{TRUE}}
 
-\item{call}{Passed to \code{\link[=cli_abort]{cli_abort()}}, Default: \code{\link[=caller_env]{caller_env()}}}
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 }
 \description{
 The filename or path must include a single file extension.

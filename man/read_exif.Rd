@@ -23,7 +23,8 @@ write_exif(
   description = NULL,
   args = NULL,
   overwrite = TRUE,
-  append_keywords = FALSE
+  append_keywords = FALSE,
+  call = caller_env()
 )
 }
 \arguments{
@@ -57,6 +58,11 @@ the provided fields; defaults to \code{TRUE}}
 
 \item{append_keywords}{If \code{TRUE}, append keywords, if \code{FALSE}, replace
 keywords in file metadata.}
+
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 }
 \description{
 \code{\link[=read_exif]{read_exif()}} read EXIF data from folder of files. This function also assigns

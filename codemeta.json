@@ -8,7 +8,7 @@
   "codeRepository": "https://github.com/elipousson/filenamr",
   "issueTracker": "https://github.com/elipousson/filenamr/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.1.0",
+  "version": "0.1.0.9001",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -117,18 +117,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "sf",
-      "name": "sf",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=sf"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "testthat",
       "name": "testthat",
       "version": ">= 3.0.0",
@@ -205,8 +193,10 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "71.212KB",
+  "fileSize": "108.059KB",
+  "releaseNotes": "https://github.com/elipousson/filenamr/blob/master/NEWS.md",
   "readme": "https://github.com/elipousson/filenamr/blob/main/README.md",
   "contIntegration": "https://app.codecov.io/gh/elipousson/filenamr?branch=main",
+  "developmentStatus": ["https://lifecycle.r-lib.org/articles/stages.html#experimental", "https://www.repostatus.org/#active"],
   "keywords": ["file-naming", "r-package"]
 }

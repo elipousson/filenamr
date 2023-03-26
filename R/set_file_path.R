@@ -13,6 +13,7 @@
 #'   file extension, and fileext is used to validate the supplied.
 #' @param allow_null If `TRUE`, return `NULL` if filename and path are `NULL`.
 #'   If `FALSE`, error if filename and path are both `NULL`.
+#' @inheritParams rlang::args_error_context
 #' @export
 #' @importFrom cli cli_alert_danger
 #' @importFrom rlang is_false is_null
@@ -20,7 +21,7 @@ set_file_path <- function(filename = NULL,
                           path = NULL,
                           fileext = NULL,
                           allow_null = FALSE,
-                          call = parent.frame()) {
+                          call = caller_env()) {
   check_string(filename, allow_null = TRUE, call = call)
   check_string(path, allow_null = TRUE, call = call)
 

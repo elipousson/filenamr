@@ -12,7 +12,8 @@ get_data_dir(
   appname = NULL,
   pkg = NULL,
   allow_null = TRUE,
-  quiet = FALSE
+  quiet = FALSE,
+  call = caller_env()
 )
 }
 \arguments{
@@ -37,6 +38,11 @@ create directory if the provided directory does not exist.}
 \code{NULL} path value; defaults to \code{TRUE}.}
 
 \item{quiet}{If \code{TRUE}, suppress informational messages.}
+
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 }
 \description{
 Get the path for a package-specific cache directory with

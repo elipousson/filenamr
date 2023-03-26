@@ -115,6 +115,7 @@ fmt_exif_data <- function(data) {
 #'   the provided fields; defaults to `TRUE`
 #' @param append_keywords If `TRUE`, append keywords, if `FALSE`, replace
 #'   keywords in file metadata.
+#' @inheritParams rlang::args_error_context
 #' @export
 #' @importFrom rlang check_installed
 #' @importFrom cliExtras cli_list_files
@@ -128,7 +129,8 @@ write_exif <- function(path,
                        # metadata = NULL,
                        args = NULL,
                        overwrite = TRUE,
-                       append_keywords = FALSE) {
+                       append_keywords = FALSE,
+                       call = caller_env()) {
   rlang::check_installed("exiftoolr")
 
   # if (!is.null(metadata) && is.data.frame(metadata)) {
@@ -187,8 +189,10 @@ write_exif <- function(path,
   }
 
   if (is.null(args)) {
+    add_args <- c("title", "author", "description", "date", "keywords")
     cli::cli_abort(
-      "{.arg args} must be provided."
+      "{.arg args} must be supplied if {.arg {add_args}} are all {.code NULL}.",
+      call = call
     )
   }
 
@@ -197,7 +201,10 @@ write_exif <- function(path,
   } else {
 
     if (!all(is_file(path))) {
-      cli::cli_abort("")
+      cli::cli_abort(
+        "{.arg path} must be an existing directory or character vector of existing files.",
+        call = call
+        )
     }
 
     files <- path
@@ -215,8 +222,7 @@ write_exif <- function(path,
 
   cliExtras::cli_list_files(
     files = files,
-    text = c("v" = "Updated EXIF metadata for {length(files)} file{?s}:"),
-    pattern = pattern
+    text = c("v" = "Updated EXIF metadata for {length(files)} file{?s}:")
   )
 }
 

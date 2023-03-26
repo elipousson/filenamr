@@ -9,7 +9,7 @@ set_file_path(
   path = NULL,
   fileext = NULL,
   allow_null = FALSE,
-  call = parent.frame()
+  call = caller_env()
 )
 }
 \arguments{
@@ -24,6 +24,11 @@ file extension, and fileext is used to validate the supplied.}
 
 \item{allow_null}{If \code{TRUE}, return \code{NULL} if filename and path are \code{NULL}.
 If \code{FALSE}, error if filename and path are both \code{NULL}.}
+
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 }
 \description{
 This is a flexible wrapper for \code{\link[isstatic:file_path]{isstatic::file_path()}} that allows you to

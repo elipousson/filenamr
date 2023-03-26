@@ -28,8 +28,6 @@
 #'   [get_data_dir()]; defaults to `FALSE`.
 #' @inheritParams get_data_dir
 #' @inheritParams isstatic::str_increment_digits
-#' @param allow_no_fileext If `FALSE`, error if a file extension is not supplied
-#'   through the filename, path, or fileext parameter. Defaults to `TRUE`.
 #' @family read_write
 #' @examples
 #'
@@ -69,11 +67,13 @@ make_filename <- function(name = NULL,
                           appname = NULL,
                           pkg = NULL,
                           create = TRUE,
-                          increment = NULL) {
+                          increment = NULL,
+                          call = caller_env()) {
   appname <- appname %||% pkg
   cli_abort_ifnot(
     "{.arg name}, {.arg filename}, or {.arg path} must be provided.",
-    condition = is.character(c(name, filename, path))
+    condition = is.character(c(name, filename, path)),
+    call = call
   )
 
   if (has_fileext(name)) {
@@ -106,7 +106,8 @@ make_filename <- function(name = NULL,
         pad = pad,
         width = width,
         use_clean_names = TRUE,
-        use_make_names = FALSE
+        use_make_names = FALSE,
+        call = call
       )
   } else {
     cli_warn_ifnot(
@@ -124,7 +125,8 @@ make_filename <- function(name = NULL,
       postfix = postfix,
       pad = NULL,
       use_clean_names = TRUE,
-      use_make_names = FALSE
+      use_make_names = FALSE,
+      call = call
     )
 
   filename <- str_increment_digits(filename, increment = increment)

@@ -16,6 +16,7 @@ str_affix(
   case = "snake",
   replace = c(`'` = "", `"` = "", `\%` = "_pct_", `#` = "_num_"),
   use_make_names = TRUE,
+  call = caller_env(),
   ...
 )
 
@@ -66,6 +67,11 @@ value.}
 \item{use_make_names}{Should \code{make.names()} be applied to ensure that the
 output is usable as a name without quoting?  (Avoiding \code{make.names()}
 ensures that the output is locale-independent but quoting may be required.)}
+
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 
 \item{...}{Additional parameters passed to janitor::make_clean_names() if
 use_clean_names is \code{TRUE}.}

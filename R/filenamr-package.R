@@ -11,8 +11,10 @@
 #' @importFrom rlang is_missing
 #' @importFrom rlang is_vector
 #' @importFrom rlang is_list
+#' @importFrom rlang is_false
 #' @importFrom rlang is_string
 #' @importFrom rlang is_na
+#' @importFrom rlang na_chr
 #' @importFrom rlang abort
 #' @importFrom cli cli_abort cli_warn cli_inform
 #' @importFrom cliExtras cli_abort_ifnot cli_warn_ifnot cli_inform_ifnot

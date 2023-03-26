@@ -22,6 +22,11 @@ exist.}
 most common file types if path has more than n unique file types.}
 
 \item{quiet}{If \code{TRUE}, suppress informational messages.}
+
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 }
 \description{
 If fileext is provided, \code{\link[=get_path_fileext]{get_path_fileext()}} will pass the file extension

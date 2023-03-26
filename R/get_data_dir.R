@@ -19,10 +19,10 @@
 #' @param ask If `TRUE`, create is `FALSE`, and session is interactive, ask to
 #'   create directory if the provided directory does not exist.
 #' @param quiet If `TRUE`, suppress informational messages.
+#' @inheritParams rlang::args_error_context
 #' @export
 #' @importFrom cliExtras cli_quiet cli_yesno
 #' @importFrom rlang check_installed is_interactive
-#' @importFrom rappdirs user_cache_dir
 #' @importFrom cli cli_alert_warning cli_alert_success
 get_data_dir <- function(path = NULL,
                          cache = FALSE,
@@ -31,7 +31,8 @@ get_data_dir <- function(path = NULL,
                          appname = NULL,
                          pkg = NULL,
                          allow_null = TRUE,
-                         quiet = FALSE) {
+                         quiet = FALSE,
+                         call = caller_env()) {
   appname <- appname %||% pkg
   cli_quiet(quiet)
 
@@ -50,7 +51,8 @@ get_data_dir <- function(path = NULL,
     }
 
     cli_abort(
-      "{.arg path} can't be {.val NULL} when {.code allow_null = FALSE}"
+      "{.arg path} can't be {.val NULL} when {.code allow_null = FALSE}",
+      call = call
     )
   }
 
@@ -97,6 +99,7 @@ get_data_dir <- function(path = NULL,
 #' @param n Max number of unique file types to return. Returns warning and n
 #'   most common file types if path has more than n unique file types.
 #' @param quiet If `TRUE`, suppress informational messages.
+#' @inheritParams rlang::args_error_context
 #' @export
 get_path_fileext <- function(path,
                              fileext = NULL,
@@ -106,11 +109,11 @@ get_path_fileext <- function(path,
   cli_quiet(quiet)
 
   if (!is.null(fileext)) {
-    check_string(fileext)
+    check_string(fileext, call = call)
     return(fileext)
   }
 
-  fileext <- list_path_fileext(path)
+  fileext <- list_path_fileext(path, call = call)
 
   if (length(unique(fileext)) <= n) {
     return(unique(fileext))
@@ -151,7 +154,8 @@ list_path_fileext <- function(path, allow_null = FALSE, call = caller_env(), ...
     c("A valid file or directory {.arg path} must be supplied.",
       "i" = "{.arg path} {.path {path}} does not exist."
     ),
-    condition = isFALSE(empty_file_list)
+    condition = is_false(empty_file_list),
+    call = call
   )
 
   str_extract_fileext(file_list)
@@ -165,8 +169,9 @@ list_path_filenames <- function(path,
                                 fileext = NULL,
                                 pattern = NULL,
                                 full.names = TRUE,
+                                call = caller_env(),
                                 ...) {
-  rlang::check_required(path)
+  rlang::check_required(path, call = call)
   if (is.data.frame(path) && rlang::has_name(path, "path")) {
     path <- path[["path"]]
   }
@@ -189,6 +194,7 @@ list_path_filenames <- function(path,
   cli_abort(
     c("A valid file or directory {.arg path} must be provided.",
       "i" = "The provided {.arg path} {.file {path}} does not exist."
-    )
+    ),
+    call = call
   )
 }

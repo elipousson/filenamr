@@ -18,7 +18,8 @@ make_filename(
   appname = NULL,
   pkg = NULL,
   create = TRUE,
-  increment = NULL
+  increment = NULL,
+  call = caller_env()
 )
 }
 \arguments{
@@ -69,8 +70,10 @@ new directory will be created.}
 increment digits in string by value. If \code{NULL}, 0, or if no digits are
 present in string, return string as is.}
 
-\item{allow_no_fileext}{If \code{FALSE}, error if a file extension is not supplied
-through the filename, path, or fileext parameter. Defaults to \code{TRUE}.}
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 }
 \description{
 A helper function to create consistent file names for plots created with data
