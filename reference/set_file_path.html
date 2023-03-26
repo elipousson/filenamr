@@ -65,7 +65,7 @@ the two file extensions do not match.</p>
 <span>  path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fileext <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  allow_null <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  call <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -89,6 +89,13 @@ file extension, and fileext is used to validate the supplied.</p></dd>
 <dt>allow_null</dt>
 <dd><p>If <code>TRUE</code>, return <code>NULL</code> if filename and path are <code>NULL</code>.
 If <code>FALSE</code>, error if filename and path are both <code>NULL</code>.</p></dd>
+
+
+<dt>call</dt>
+<dd><p>The execution environment of a currently
+running function, e.g. <code>caller_env()</code>. The function will be
+mentioned in error messages as the source of the error. See the
+<code>call</code> argument of <code><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">abort()</a></code> for more information.</p></dd>
 
 </dl></div>
 

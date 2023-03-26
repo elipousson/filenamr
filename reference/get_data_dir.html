@@ -65,7 +65,8 @@ optionally create a new directory at the provided path location.</p>
 <span>  appname <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pkg <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  allow_null <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -105,6 +106,13 @@ create directory if the provided directory does not exist.</p></dd>
 
 <dt>quiet</dt>
 <dd><p>If <code>TRUE</code>, suppress informational messages.</p></dd>
+
+
+<dt>call</dt>
+<dd><p>The execution environment of a currently
+running function, e.g. <code>caller_env()</code>. The function will be
+mentioned in error messages as the source of the error. See the
+<code>call</code> argument of <code><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">abort()</a></code> for more information.</p></dd>
 
 </dl></div>
 

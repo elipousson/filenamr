@@ -98,7 +98,8 @@ IPTC:Caption-Abstract</p></li>
 <span>  description <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  args <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  append_keywords <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  append_keywords <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -157,6 +158,13 @@ the provided fields; defaults to <code>TRUE</code></p></dd>
 <dt>append_keywords</dt>
 <dd><p>If <code>TRUE</code>, append keywords, if <code>FALSE</code>, replace
 keywords in file metadata.</p></dd>
+
+
+<dt>call</dt>
+<dd><p>The execution environment of a currently
+running function, e.g. <code>caller_env()</code>. The function will be
+mentioned in error messages as the source of the error. See the
+<code>call</code> argument of <code><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">abort()</a></code> for more information.</p></dd>
 
 </dl></div>
 
