@@ -24,6 +24,7 @@
 #' @importFrom cliExtras cli_quiet cli_yesno
 #' @importFrom rlang check_installed is_interactive
 #' @importFrom cli cli_alert_warning cli_alert_success
+#' @importFrom rappdirs user_cache_dir
 get_data_dir <- function(path = NULL,
                          cache = FALSE,
                          create = TRUE,
@@ -37,7 +38,6 @@ get_data_dir <- function(path = NULL,
   cli_quiet(quiet)
 
   if (cache) {
-    rlang::check_installed("rappdirs")
     path <- path %||% rappdirs::user_cache_dir(appname)
   }
 

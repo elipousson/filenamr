@@ -26,8 +26,9 @@ list_pkg_data <- function(pkg = NULL,
 #' @export
 #' @importFrom utils data
 list_pkg_datasets <- function(pkg, envir = .GlobalEnv) {
-  data_files <- as.data.frame(
-    utils::data(package = pkg, envir = envir)[["results"]]
+  data_files <-
+    as.data.frame(
+      utils::data(package = pkg, envir = envir)[["results"]]
     )
   data_files <- data_files[, c("Package", "Item", "LibPath")]
   names(data_files) <- c("package", "item", "path")
@@ -42,7 +43,6 @@ list_pkg_extdata <- function(pkg,
                              full.names = TRUE,
                              recursive = TRUE) {
   extdata_dir <- system.file("extdata", package = pkg)
-  extdata_files <- NULL
 
   extdata_files <- list.files(
     path = extdata_dir,
@@ -66,21 +66,17 @@ list_pkg_extdata <- function(pkg,
 #' @rdname list_pkg_data
 #' @export
 #' @importFrom rlang is_installed is_empty
+#' @importFrom rappdirs user_cache_dir
 list_pkg_cachedata <- function(pkg,
                                full.names = TRUE,
                                recursive = TRUE) {
-  cache_dir <- NULL
-  cache_files <- NULL
+  cache_dir <- rappdirs::user_cache_dir(pkg)
 
-  if (rlang::is_installed("rappdirs")) {
-    cache_dir <- rappdirs::user_cache_dir(pkg)
-
-    cache_files <- list.files(
-      path = cache_dir,
-      recursive = recursive,
-      full.names = full.names
-    )
-  }
+  cache_files <- list.files(
+    path = cache_dir,
+    recursive = recursive,
+    full.names = full.names
+  )
 
   if (!rlang::is_empty(cache_files)) {
     cache_files <-
