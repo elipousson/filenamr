@@ -2,6 +2,7 @@
 % Please edit documentation in R/get_data_dir.R
 \name{get_data_dir}
 \alias{get_data_dir}
+\alias{list_path_filenames}
 \title{Check if data directory exists and create a new directory if needed}
 \usage{
 get_data_dir(
@@ -14,6 +15,15 @@ get_data_dir(
   allow_null = TRUE,
   quiet = FALSE,
   call = caller_env()
+)
+
+list_path_filenames(
+  path,
+  fileext = NULL,
+  pattern = NULL,
+  full.names = TRUE,
+  call = caller_env(),
+  ...
 )
 }
 \arguments{
