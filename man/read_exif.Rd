@@ -21,6 +21,7 @@ write_exif(
   date = NULL,
   keywords = NULL,
   description = NULL,
+  alt = NULL,
   args = NULL,
   overwrite = TRUE,
   append_keywords = FALSE,

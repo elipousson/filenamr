@@ -10,7 +10,6 @@ test_that("read_exif and write_exif works", {
   )
 
   withr::with_tempdir({
-
     tempfiles <- basename(list.files(path))
 
     file.copy(
@@ -32,6 +31,5 @@ test_that("read_exif and write_exif works", {
       photos_write$keywords,
       list(c("test", "test"), c("test", "test"))
     )
-
   })
 })

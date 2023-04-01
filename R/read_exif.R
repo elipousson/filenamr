@@ -126,6 +126,7 @@ write_exif <- function(path,
                        date = NULL,
                        keywords = NULL,
                        description = NULL,
+                       alt = NULL,
                        # metadata = NULL,
                        args = NULL,
                        overwrite = TRUE,
@@ -155,6 +156,14 @@ write_exif <- function(path,
       args <- c(args, glue("-ImageDescription={description}"))
       args <- c(args, glue("-IPTC:Caption-Abstract={description}"))
       args <- c(args, glue("-XMP-dc:Description={description}"))
+    }
+
+    if (!is.null(alt)) {
+      # https://exiftool.org/TagNames/IPTC.html
+      # https://www.iptc.org/std/photometadata/specification/IPTC-PhotoMetadata#alt-text-accessibility
+      args <- c(args, glue("-IPTC:AltTextAccessibility={alt}"))
+      # https://exiftool.org/TagNames/PNG.html
+      args <- c(args, glue("-iTXt={alt}"))
     }
 
     if (!is.null(date)) {
@@ -199,12 +208,11 @@ write_exif <- function(path,
   if (all(dir.exists(path))) {
     files <- list_path_filenames(path, fileext = fileext)
   } else {
-
     if (!all(is_file(path))) {
       cli::cli_abort(
         "{.arg path} must be an existing directory or character vector of existing files.",
         call = call
-        )
+      )
     }
 
     files <- path
