@@ -21,7 +21,7 @@
 #' @param quiet If `TRUE`, suppress informational messages.
 #' @inheritParams rlang::args_error_context
 #' @export
-#' @importFrom cliExtras cli_quiet cli_yesno
+#' @importFrom cliExtras cli_yesno
 #' @importFrom rlang check_installed is_interactive
 #' @importFrom cli cli_alert_warning cli_alert_success
 #' @importFrom rappdirs user_cache_dir

@@ -44,14 +44,14 @@ check_file_overwrite <- function(filename = NULL,
         )
     }
 
-    cli_abort_ifnot(
-      c(
+    cli_ifnot(
+      overwrite,
+      text = c(
         "!" = "{.file {filename}} can't be saved.",
         "i" = "A file with the same name already exists.
         Set {.code overwrite = TRUE} to remove."
       ),
-      condition = overwrite,
-      call = call
+      .fn = cli::cli_bullets
     )
 
     cli::cli_alert_success(
