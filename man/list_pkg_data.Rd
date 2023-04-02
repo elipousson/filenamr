@@ -7,7 +7,13 @@
 \alias{list_pkg_cachedata}
 \title{List package datasets, extdata files, and files in package cache}
 \usage{
-list_pkg_data(pkg = NULL, version = NULL, call = caller_env())
+list_pkg_data(
+  pkg = NULL,
+  version = NULL,
+  dir = "extdata",
+  lib.loc = NULL,
+  call = caller_env()
+)
 
 list_pkg_datasets(pkg, lib.loc = NULL)
 
@@ -22,16 +28,16 @@ e.g. \code{"pkg (>= 1.0.0)"}.}
 \item{version}{Minimum versions for \code{pkg}. If supplied, must be the
 same length as \code{pkg}. \code{NA} elements stand for any versions.}
 
-\item{call}{The execution environment of a currently
-running function, e.g. \code{caller_env()}. The function will be
-mentioned in error messages as the source of the error. See the
-\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
+\item{dir}{One or more directory names to pass as the first argument of
+\code{\link[=system.file]{system.file()}}. Defaults to "extdir".}
 
 \item{lib.loc}{a character vector with path names of \R libraries.
     See \sQuote{Details} for the meaning of the default value of \code{NULL}.}
 
-\item{dir}{One or more directory names to pass as the first argument of
-\code{\link[=system.file]{system.file()}}. Defaults to "extdir".}
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 
 \item{full.names}{a logical value.  If \code{TRUE}, the directory
     path is prepended to the file names to give a relative file path.

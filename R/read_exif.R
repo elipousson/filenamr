@@ -105,6 +105,8 @@ fmt_exif_data <- function(data) {
 #' @param author Author to add to file metadata with exiftoolr, Default: `NULL`.
 #' @param date Date to add to file metadata with exiftoolr (not currently
 #'   working), Default: `NULL`.
+#' @param alt Text to pass as alt text to the "IPTC:AltTextAccessibility" and
+#'   "iTXt" (PNG files only) tags.
 #' @param keywords Keyword(s) added to file metadata with with exiftoolr,
 #'   Default: `NULL`.
 #' @param description Description added to file metadata.

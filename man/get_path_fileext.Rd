@@ -3,7 +3,7 @@
 \name{get_path_fileext}
 \alias{get_path_fileext}
 \alias{list_path_fileext}
-\title{Get file types or extensions for files at a path}
+\title{Get file extensions for files at a path}
 \usage{
 get_path_fileext(
   path,
@@ -19,7 +19,9 @@ list_path_fileext(path, allow_null = FALSE, call = caller_env(), ...)
 \item{path}{A single directory or file path. The directory or file must
 exist.}
 
-\item{fileext}{If not \code{NULL}, function returns file type as is.}
+\item{fileext}{If fileext is supplied, the function returns the file
+extension as is. If \code{NULL} (default), one or more file extensions are
+extracted from files at the path location.}
 
 \item{n}{Max number of unique file types to return. Returns warning and n
 most common file types if path has more than n unique file types.}
@@ -30,6 +32,13 @@ most common file types if path has more than n unique file types.}
 running function, e.g. \code{caller_env()}. The function will be
 mentioned in error messages as the source of the error. See the
 \code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
+
+\item{allow_null}{If \code{TRUE}, \code{\link[=list_path_fileext]{list_path_fileext()}} returns \code{NULL} if path is
+\code{NULL} or if no files exist at the path location. If \code{FALSE} (default),
+abort if either condition is met.}
+
+\item{...}{Additional parameters passed by \code{\link[=list_path_fileext]{list_path_fileext()}} to
+\code{\link[=list.files]{list.files()}}.}
 }
 \description{
 If fileext is provided, \code{\link[=get_path_fileext]{get_path_fileext()}} will pass the file extension

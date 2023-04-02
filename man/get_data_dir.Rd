@@ -53,6 +53,19 @@ create directory if the provided directory does not exist.}
 running function, e.g. \code{caller_env()}. The function will be
 mentioned in error messages as the source of the error. See the
 \code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
+
+\item{fileext}{File extension. If supplied to \code{\link[=list_path_filenames]{list_path_filenames()}} and
+pattern is \code{NULL}, only return file names matching this extension.}
+
+\item{pattern}{an optional \link[base]{regular expression}.  Only file names
+    which match the regular expression will be returned.}
+
+\item{full.names}{a logical value.  If \code{TRUE}, the directory
+    path is prepended to the file names to give a relative file path.
+    If \code{FALSE}, the file names (rather than paths) are returned.}
+
+\item{...}{Additional parameters passed to \code{\link[=list.files]{list.files()}} by
+\code{\link[=list_path_filenames]{list_path_filenames()}}.}
 }
 \description{
 Get the path for a package-specific cache directory with

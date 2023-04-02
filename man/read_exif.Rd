@@ -50,6 +50,9 @@ Default: \code{NULL}.}
 
 \item{description}{Description added to file metadata.}
 
+\item{alt}{Text to pass as alt text to the "IPTC:AltTextAccessibility" and
+"iTXt" (PNG files only) tags.}
+
 \item{args}{Alternate arguments passed to \code{\link[exiftoolr:exif_call]{exiftoolr::exif_call()}}. If args
 is not \code{NULL}, title, author, date, and keywords are ignored; defaults to
 \code{NULL}.}

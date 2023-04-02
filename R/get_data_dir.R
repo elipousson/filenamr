@@ -90,6 +90,11 @@ get_data_dir <- function(path = NULL,
 
 #' @name list_path_filenames
 #' @rdname get_data_dir
+#' @param fileext File extension. If supplied to [list_path_filenames()] and
+#'   pattern is `NULL`, only return file names matching this extension.
+#' @inheritParams base::list.files
+#' @param ... Additional parameters passed to [list.files()] by
+#'   [list_path_filenames()].
 #' @importFrom rlang caller_env check_required has_name
 list_path_filenames <- function(path,
                                 fileext = NULL,
