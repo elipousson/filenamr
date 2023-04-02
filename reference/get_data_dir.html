@@ -123,6 +123,27 @@ running function, e.g. <code>caller_env()</code>. The function will be
 mentioned in error messages as the source of the error. See the
 <code>call</code> argument of <code><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">abort()</a></code> for more information.</p></dd>
 
+
+<dt>fileext</dt>
+<dd><p>File extension. If supplied to <code>list_path_filenames()</code> and
+pattern is <code>NULL</code>, only return file names matching this extension.</p></dd>
+
+
+<dt>pattern</dt>
+<dd><p>an optional <a href="https://rdrr.io/r/base/regex.html" class="external-link">regular expression</a>.  Only file names
+    which match the regular expression will be returned.</p></dd>
+
+
+<dt>full.names</dt>
+<dd><p>a logical value.  If <code>TRUE</code>, the directory
+    path is prepended to the file names to give a relative file path.
+    If <code>FALSE</code>, the file names (rather than paths) are returned.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Additional parameters passed to <code><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files()</a></code> by
+<code>list_path_filenames()</code>.</p></dd>
+
 </dl></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

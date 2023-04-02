@@ -49,7 +49,7 @@ in the package cache folder returned by rappdirs::user_cache_dir()."><!-- mathja
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>List package datasets, extdata files, and files in package cache</h1>
-      <small class="dont-index">Source: <a href="https://github.com/elipousson/filenamr/blob/HEAD/R/list_pkg_files.R" class="external-link"><code>R/list_pkg_files.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/elipousson/filenamr/blob/HEAD/R/list_pkg_data.R" class="external-link"><code>R/list_pkg_data.R</code></a></small>
       <div class="d-none name"><code>list_pkg_data.Rd</code></div>
     </div>
 
@@ -63,11 +63,17 @@ in the package cache folder returned by <code><a href="https://rappdirs.r-lib.or
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">list_pkg_data</span><span class="op">(</span>pkg <span class="op">=</span> <span class="cn">NULL</span>, version <span class="op">=</span> <span class="cn">NULL</span>, call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">list_pkg_data</span><span class="op">(</span></span>
+<span>  pkg <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  version <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  dir <span class="op">=</span> <span class="st">"extdata"</span>,</span>
+<span>  lib.loc <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">list_pkg_datasets</span><span class="op">(</span><span class="va">pkg</span>, envir <span class="op">=</span> <span class="va">.GlobalEnv</span><span class="op">)</span></span>
+<span><span class="fu">list_pkg_datasets</span><span class="op">(</span><span class="va">pkg</span>, lib.loc <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">list_pkg_extdata</span><span class="op">(</span><span class="va">pkg</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu">list_pkg_extdata</span><span class="op">(</span><span class="va">pkg</span>, dir <span class="op">=</span> <span class="st">"extdata"</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">list_pkg_cachedata</span><span class="op">(</span><span class="va">pkg</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -84,11 +90,31 @@ e.g. <code>"pkg (&gt;= 1.0.0)"</code>.</p></dd>
 same length as <code>pkg</code>. <code>NA</code> elements stand for any versions.</p></dd>
 
 
+<dt>dir</dt>
+<dd><p>One or more directory names to pass as the first argument of
+<code><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file()</a></code>. Defaults to "extdir".</p></dd>
+
+
+<dt>lib.loc</dt>
+<dd><p>a character vector with path names of <span style="R">R</span> libraries.
+    See ‘Details’ for the meaning of the default value of <code>NULL</code>.</p></dd>
+
+
 <dt>call</dt>
 <dd><p>The execution environment of a currently
 running function, e.g. <code>caller_env()</code>. The function will be
 mentioned in error messages as the source of the error. See the
 <code>call</code> argument of <code><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">abort()</a></code> for more information.</p></dd>
+
+
+<dt>full.names</dt>
+<dd><p>a logical value.  If <code>TRUE</code>, the directory
+    path is prepended to the file names to give a relative file path.
+    If <code>FALSE</code>, the file names (rather than paths) are returned.</p></dd>
+
+
+<dt>recursive</dt>
+<dd><p>logical.  Should the listing recurse into directories?</p></dd>
 
 </dl></div>
 
