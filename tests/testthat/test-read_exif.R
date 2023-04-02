@@ -1,6 +1,6 @@
 test_that("read_exif and write_exif works", {
-  skip("Test not working with check")
-  path <- system.file("extdata/photos", package = "filenamr")
+  skip_on_ci()
+  path <- system.file("images", package = "exiftoolr")
 
   photos <- read_exif(path)
 
@@ -29,7 +29,7 @@ test_that("read_exif and write_exif works", {
     # FIXME: This test passes but it is not the result I expected
     expect_identical(
       photos_write$keywords,
-      list(c("test", "test"), c("test", "test"))
+      list(c("test", "test"), c("test", "test"), c("test", "test"))
     )
   })
 })
