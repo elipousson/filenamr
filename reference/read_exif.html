@@ -32,7 +32,7 @@ keywords: Keywords, IPTC:Keywords, XMP-dc:Subject
     
     <a class="navbar-brand me-2" href="../index.html">filenamr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9002</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,6 +93,7 @@ IPTC:Caption-Abstract</p></li>
 <span>  fileext <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  author <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  credit <span class="op">=</span> <span class="va">author</span>,</span>
 <span>  date <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  keywords <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  description <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -128,32 +129,38 @@ tags if to create an <code>sf</code> object based on the resulting data.frame ob
 
 
 <dt>author</dt>
-<dd><p>Author to add to file metadata with exiftoolr, Default: <code>NULL</code>.</p></dd>
+<dd><p>Author to add to file metadata to the "Author" and
+"XMP-dc:creator" tags. Default: <code>NULL</code>.</p></dd>
+
+
+<dt>credit</dt>
+<dd><p>Credit to add to file metadata to the "IPTC:Credit" and
+"XMP-dc:Credit" tags. Defaults to the same value as author.</p></dd>
 
 
 <dt>date</dt>
 <dd><p>Date to add to file metadata with exiftoolr (not currently
-working), Default: <code>NULL</code>.</p></dd>
+working).  Defaults to <code>NULL</code>.</p></dd>
 
 
 <dt>keywords</dt>
-<dd><p>Keyword(s) added to file metadata with with exiftoolr,
-Default: <code>NULL</code>.</p></dd>
+<dd><p>Keyword(s) added to file metadata to "IPTC:Keywords" and
+"XMP-dc:Subject" tags. Defaults to <code>NULL</code>.</p></dd>
 
 
 <dt>description</dt>
-<dd><p>Description added to file metadata.</p></dd>
+<dd><p>Description added to the "ImageDescription",
+"IPTC:Caption-Abstract", and "XMP-dc:Description" tags.</p></dd>
 
 
 <dt>alt</dt>
 <dd><p>Text to pass as alt text to the "IPTC:AltTextAccessibility" and
-"iTXt" (PNG files only) tags.</p></dd>
+"iTXt" (PNG files only) tags. Defaults to <code>NULL</code>.</p></dd>
 
 
 <dt>args</dt>
-<dd><p>Alternate arguments passed to <code><a href="https://rdrr.io/pkg/exiftoolr/man/exif_call.html" class="external-link">exiftoolr::exif_call()</a></code>. If args
-is not <code>NULL</code>, title, author, date, and keywords are ignored; defaults to
-<code>NULL</code>.</p></dd>
+<dd><p>Alternate arguments passed to <code><a href="https://rdrr.io/pkg/exiftoolr/man/exif_call.html" class="external-link">exiftoolr::exif_call()</a></code>. Other tag
+parameters are appended to args if they are not <code>NULL</code>.</p></dd>
 
 
 <dt>overwrite</dt>

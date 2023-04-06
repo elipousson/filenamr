@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">filenamr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9002</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,6 +44,25 @@
       <small>Source: <a href="https://github.com/elipousson/filenamr/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9002" id="filenamr-0109002-2023-04-06">filenamr 0.1.0.9002 (2023-04-06)<a class="anchor" aria-label="anchor" href="#filenamr-0109002-2023-04-06"></a></h2>
+<div class="section level3">
+<h3 id="features-0-1-0-9002">Features<a class="anchor" aria-label="anchor" href="#features-0-1-0-9002"></a></h3>
+<ul><li>Add creator and alt parameters to <code><a href="../reference/read_exif.html">read_exif()</a></code>. Update handling of args so the other values are not ignored if they are not <code>NULL</code>.</li>
+<li>Export <code><a href="../reference/get_data_dir.html">list_path_filenames()</a></code> and <code><a href="../reference/get_path_fileext.html">list_path_fileext()</a></code>.</li>
+<li>Add <code><a href="../reference/list_pkg_data.html">list_pkg_data()</a></code> function.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="refactoring-0-1-0-9002">Refactoring<a class="anchor" aria-label="anchor" href="#refactoring-0-1-0-9002"></a></h3>
+<ul><li>Move <code>rappdirs</code> from Suggests to Imports.</li>
+<li>Drop <code>sf</code> package from Suggests (remove geometry parameter from <code><a href="../reference/read_exif.html">read_exif()</a></code>)</li>
+<li>Pass call parameter for more consistent error-handling for all functions.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="testing-0-1-0-9002">Testing<a class="anchor" aria-label="anchor" href="#testing-0-1-0-9002"></a></h3>
+<ul><li>Rework <code><a href="../reference/read_exif.html">read_exif()</a></code> test to use <code>exiftoolr</code> sample images.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9001" id="filenamr-0109001-2023-03-20">filenamr 0.1.0.9001 (2023-03-20)<a class="anchor" aria-label="anchor" href="#filenamr-0109001-2023-03-20"></a></h2>
 <ul><li>Export <code><a href="../reference/check_path_fileext.html">check_path_fileext()</a></code> function.</li>
