@@ -95,6 +95,7 @@ get_data_dir <- function(path = NULL,
 #' @inheritParams base::list.files
 #' @param ... Additional parameters passed to [list.files()] by
 #'   [list_path_filenames()].
+#' @export
 #' @importFrom rlang caller_env check_required has_name
 list_path_filenames <- function(path,
                                 fileext = NULL,
