@@ -1,10 +1,22 @@
-<!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
+<!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
-# filenamr development
+# filenamr 0.1.0.9002 (2023-04-06)
 
-* Refactor to consistently pass `call` parameter when using `cli_abort()` for error checking.
-* Update `read_exif()` to drop `geometry` parameter and drop sf from Suggests for package.
-* Expand tests for `get_data_dir()`.
+## Features
+
+- Add creator and alt parameters to `read_exif()`. Update handling of args so the other values are not ignored if they are not `NULL`.
+- Export `list_path_filenames()` and `list_path_fileext()`.
+- Add `list_pkg_data()` function.
+
+## Refactoring
+
+- Move `rappdirs` from Suggests to Imports.
+- Drop `sf` package from Suggests (remove geometry parameter from `read_exif()`)
+- Pass call parameter for more consistent error-handling for all functions.
+
+## Testing
+
+- Rework `read_exif()` test to use `exiftoolr` sample images.
 
 # filenamr 0.1.0.9001 (2023-03-20)
 
@@ -14,5 +26,4 @@
 # filenamr 0.1.0.9000 (2023-03-15)
 
 * Initial release.
-
 
