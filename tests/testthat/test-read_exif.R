@@ -26,10 +26,9 @@ test_that("read_exif and write_exif works", {
 
     photos_write <- read_exif(tempfiles)
 
-    # FIXME: This test passes but it is not the result I expected
     expect_identical(
       photos_write$keywords,
-      list(c("test", "test"), c("test", "test"), c("test", "test"))
+      c("test", "test", "test")
     )
   })
 })

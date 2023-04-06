@@ -102,17 +102,20 @@ fmt_exif_data <- function(data) {
 #' @name write_exif
 #' @rdname read_exif
 #' @param title Title to add to file metadata with exiftoolr, Default: `NULL`.
-#' @param author Author to add to file metadata with exiftoolr, Default: `NULL`.
+#' @param author Author to add to file metadata to the "Author" and
+#'   "XMP-dc:creator" tags. Default: `NULL`.
+#' @param credit Credit to add to file metadata to the "IPTC:Credit" and
+#'   "XMP-dc:Credit" tags. Defaults to the same value as author.
 #' @param date Date to add to file metadata with exiftoolr (not currently
-#'   working), Default: `NULL`.
+#'   working).  Defaults to `NULL`.
 #' @param alt Text to pass as alt text to the "IPTC:AltTextAccessibility" and
-#'   "iTXt" (PNG files only) tags.
-#' @param keywords Keyword(s) added to file metadata with with exiftoolr,
-#'   Default: `NULL`.
-#' @param description Description added to file metadata.
-#' @param args Alternate arguments passed to [exiftoolr::exif_call()]. If args
-#'   is not `NULL`, title, author, date, and keywords are ignored; defaults to
-#'   `NULL`.
+#'   "iTXt" (PNG files only) tags. Defaults to `NULL`.
+#' @param keywords Keyword(s) added to file metadata to "IPTC:Keywords" and
+#'   "XMP-dc:Subject" tags. Defaults to `NULL`.
+#' @param description Description added to the "ImageDescription",
+#'   "IPTC:Caption-Abstract", and "XMP-dc:Description" tags.
+#' @param args Alternate arguments passed to [exiftoolr::exif_call()]. Other tag
+#'   parameters are appended to args if they are not `NULL`.
 #' @param overwrite If `TRUE`, overwrite any existing EXIF metadata present in
 #'   the provided fields; defaults to `TRUE`
 #' @param append_keywords If `TRUE`, append keywords, if `FALSE`, replace
@@ -125,6 +128,7 @@ write_exif <- function(path,
                        fileext = NULL,
                        title = NULL,
                        author = NULL,
+                       credit = author,
                        date = NULL,
                        keywords = NULL,
                        description = NULL,
@@ -142,69 +146,75 @@ write_exif <- function(path,
 
   # FIXME: I want to implement a method that allows adding, replacing, or
   # modifying exif
-  if (is.null(args)) {
-    if (!is.null(title)) {
-      args <- c(args, glue("-Title={title}"))
-      args <- c(args, glue("-IPTC:Headline={title}"))
-      args <- c(args, glue("-IPTC:ObjectName={title}"))
-      args <- c(args, glue("-XMP-dc:Title={title}"))
-    }
+  if (!is.null(title)) {
+    args <- c(args, glue("-Title={title}"))
+    args <- c(args, glue("-IPTC:Headline={title}"))
+    args <- c(args, glue("-IPTC:ObjectName={title}"))
+    args <- c(args, glue("-XMP-dc:Title={title}"))
+  }
 
-    if (!is.null(author)) {
-      args <- c(args, glue("-Author={author}"))
-    }
+  if (!is.null(author)) {
+    args <- c(args, glue("-Author={author}"))
+   # args <- c(args, glue("-IPTC:Creator={author}"))
+    args <- c(args, glue("-XMP-dc:creator={author}"))
+  }
 
-    if (!is.null(description)) {
-      args <- c(args, glue("-ImageDescription={description}"))
-      args <- c(args, glue("-IPTC:Caption-Abstract={description}"))
-      args <- c(args, glue("-XMP-dc:Description={description}"))
-    }
+  if (!is.null(credit)) {
+    args <- c(args, glue("-IPTC:Credit={credit}"))
+    args <- c(args, glue("-XMP-dc:Credit={credit}"))
+  }
 
-    if (!is.null(alt)) {
-      # https://exiftool.org/TagNames/IPTC.html
-      # https://www.iptc.org/std/photometadata/specification/IPTC-PhotoMetadata#alt-text-accessibility
-      args <- c(args, glue("-IPTC:AltTextAccessibility={alt}"))
+  if (!is.null(description)) {
+    args <- c(args, glue("-ImageDescription={description}"))
+    args <- c(args, glue("-IPTC:Caption-Abstract={description}"))
+    args <- c(args, glue("-XMP-dc:Description={description}"))
+  }
+
+  if (!is.null(alt)) {
+    # https://exiftool.org/TagNames/IPTC.html
+    # https://www.iptc.org/std/photometadata/specification/IPTC-PhotoMetadata#alt-text-accessibility
+    args <- c(args, glue("-IPTC:AltTextAccessibility={alt}"))
+    if ("png" %in% fileext) {
       # https://exiftool.org/TagNames/PNG.html
       args <- c(args, glue("-iTXt={alt}"))
     }
+  }
 
-    if (!is.null(date)) {
-      # FIXME: exiftoolr::exif_call() does not support the "now" value supported
-      # by exif If CreateDate is set to now automatically, why bother revising
-      # with exiftoolr anyway? TODO: Add support for subjects (partially
-      # complete with keywords)
-      # https://stackoverflow.com/questions/28588696/python-exiftool-combining-subject-and-keyword-tags#28609886
-      date <- "now"
-      if ("png" %in% fileext) {
-        args <- c(args, glue("-CreationTime={date}"))
-      } else {
-        args <- c(args, c(glue("-CreateDate={date}"), glue("-ModifyDate={date}")))
-      }
-    }
-
-    if (!is.null(keywords)) {
-      op <- "+="
-
-      if (overwrite && !append_keywords) {
-        op <- "="
-      }
-
-      args <- c(args, paste0("-Keywords", op, keywords))
-      args <- c(args, paste0("-IPTC:Keywords", op, keywords))
-      args <- c(args, paste0("-XMP-dc:Subject", op, keywords))
-    }
-
-    if (overwrite) {
-      args <- c(args, "-overwrite_original")
+  if (!is.null(date)) {
+    # FIXME: exiftoolr::exif_call() does not support the "now" value supported
+    # by exif If CreateDate is set to now automatically, why bother revising
+    # with exiftoolr anyway?
+    date <- "now"
+    if ("png" %in% fileext) {
+      args <- c(args, glue("-CreationTime={date}"))
+    } else {
+      args <- c(args, c(glue("-CreateDate={date}"), glue("-ModifyDate={date}")))
     }
   }
 
+  if (!is.null(keywords)) {
+    # TODO: Add support for subjects (partially complete with keywords)
+    # https://stackoverflow.com/questions/28588696/python-exiftool-combining-subject-and-keyword-tags#28609886
+    op <- "+="
+    if (overwrite && !append_keywords) {
+      op <- "="
+    }
+
+    # args <- c(args, paste0("-Keywords", op, keywords))
+    args <- c(args, paste0("-IPTC:Keywords", op, keywords))
+    args <- c(args, paste0("-XMP-dc:Subject", op, keywords))
+  }
+
   if (is.null(args)) {
-    add_args <- c("title", "author", "description", "date", "keywords")
+    add_args <- c("title", "author", "creator", "description", "alt", "date", "keywords")
     cli::cli_abort(
       "{.arg args} must be supplied if {.arg {add_args}} are all {.code NULL}.",
       call = call
     )
+  }
+
+  if (overwrite) {
+      args <- c(args, "-overwrite_original")
   }
 
   if (all(dir.exists(path))) {

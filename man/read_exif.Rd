@@ -18,6 +18,7 @@ write_exif(
   fileext = NULL,
   title = NULL,
   author = NULL,
+  credit = author,
   date = NULL,
   keywords = NULL,
   description = NULL,
@@ -40,22 +41,26 @@ tags if to create an \code{sf} object based on the resulting data.frame object.}
 
 \item{title}{Title to add to file metadata with exiftoolr, Default: \code{NULL}.}
 
-\item{author}{Author to add to file metadata with exiftoolr, Default: \code{NULL}.}
+\item{author}{Author to add to file metadata to the "Author" and
+"XMP-dc:creator" tags. Default: \code{NULL}.}
+
+\item{credit}{Credit to add to file metadata to the "IPTC:Credit" and
+"XMP-dc:Credit" tags. Defaults to the same value as author.}
 
 \item{date}{Date to add to file metadata with exiftoolr (not currently
-working), Default: \code{NULL}.}
+working).  Defaults to \code{NULL}.}
 
-\item{keywords}{Keyword(s) added to file metadata with with exiftoolr,
-Default: \code{NULL}.}
+\item{keywords}{Keyword(s) added to file metadata to "IPTC:Keywords" and
+"XMP-dc:Subject" tags. Defaults to \code{NULL}.}
 
-\item{description}{Description added to file metadata.}
+\item{description}{Description added to the "ImageDescription",
+"IPTC:Caption-Abstract", and "XMP-dc:Description" tags.}
 
 \item{alt}{Text to pass as alt text to the "IPTC:AltTextAccessibility" and
-"iTXt" (PNG files only) tags.}
+"iTXt" (PNG files only) tags. Defaults to \code{NULL}.}
 
-\item{args}{Alternate arguments passed to \code{\link[exiftoolr:exif_call]{exiftoolr::exif_call()}}. If args
-is not \code{NULL}, title, author, date, and keywords are ignored; defaults to
-\code{NULL}.}
+\item{args}{Alternate arguments passed to \code{\link[exiftoolr:exif_call]{exiftoolr::exif_call()}}. Other tag
+parameters are appended to args if they are not \code{NULL}.}
 
 \item{overwrite}{If \code{TRUE}, overwrite any existing EXIF metadata present in
 the provided fields; defaults to \code{TRUE}}
