@@ -24,7 +24,7 @@ fmt_exif_direction <- function(data, winds = 8, .after = "img_direction", call =
     return(data)
   }
 
-  rlang::check_installed("dplyr")
+  check_installed("dplyr")
 
   img_cardinal_dir <- as_cardinal_bearing(data$img_direction, winds)
 

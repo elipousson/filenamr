@@ -83,7 +83,7 @@ fmt_exif_data <- function(data) {
       ~ sub("^gps_", "", .x)
     )
 
-  xwalk <- exif_xwalk[rlang::has_name(data, exif_xwalk)]
+  xwalk <- exif_xwalk[has_name(data, exif_xwalk)]
 
   data <-
     # Rename variables

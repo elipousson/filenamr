@@ -32,7 +32,7 @@ set_file_path <- function(filename = NULL,
     )
   }
 
-  if (is.null(filename) && is.null(path) && rlang::is_false(allow_null)) {
+  if (is.null(filename) && is.null(path) && is_false(allow_null)) {
     cli_abort(
       "{.arg filename} and {.arg path}  can't both be `NULL` if
       {.code allow_null = FALSE}.",

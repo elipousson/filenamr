@@ -14,7 +14,7 @@ list_pkg_data <- function(pkg = NULL,
                           dir = "extdata",
                           lib.loc = NULL,
                           call = caller_env()) {
-  rlang::check_installed(pkg, version = version, call = call)
+  check_installed(pkg, version = version, call = call)
 
   rbind(
     list_pkg_datasets(pkg, lib.loc = lib.loc),
@@ -43,7 +43,7 @@ list_pkg_datasets <- function(pkg,
       rep_len(pkg, nrow(data_files))
     )
 
-  rlang::set_names(data_files, c("item", "path", "package"))
+  set_names(data_files, c("item", "path", "package"))
 }
 
 #' @name list_pkg_extdata
@@ -64,7 +64,7 @@ list_pkg_extdata <- function(pkg,
 
   extdata_files <- list_system_files(pkg, dir, recursive, full.names)
 
-  if (!rlang::is_empty(extdata_files)) {
+  if (!is_empty(extdata_files)) {
     extdata_files <-
       cbind(
         data.frame("item" = str_remove_fileext(basename(extdata_files))),
@@ -111,7 +111,7 @@ list_pkg_cachedata <- function(pkg,
     full.names = full.names
   )
 
-  if (!rlang::is_empty(cache_files)) {
+  if (!is_empty(cache_files)) {
     cache_files <-
       cbind(
         data.frame("item" = str_remove_fileext(basename(cache_files))),

@@ -71,7 +71,7 @@ list_path_fileext <- function(path,
     file_list <- path
   }
 
-  if (rlang::is_empty(file_list) && isTRUE(allow_null)) {
+  if (is_empty(file_list) && isTRUE(allow_null)) {
     return(invisible(NULL))
   }
 

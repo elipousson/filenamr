@@ -9,7 +9,7 @@
 #'   [rappdirs::user_cache_dir()] (using value of pkg as appname). If path is
 #'   not `NULL`, the path is returned even if cache is `TRUE`.
 #' @param create If `FALSE` and path does not exist, return path with a warning.
-#'   If `TRUE` and [rlang::is_interactive()] is `TRUE`, ask user if directory
+#'   If `TRUE` and [is_interactive()] is `TRUE`, ask user if directory
 #'   should be created. If the session not interactive and create is `TRUE`, a
 #'   new directory will be created.
 #' @param appname,pkg pkg is used if appname is NULL. Passed to
@@ -63,7 +63,7 @@ get_data_dir <- function(path = NULL,
     return(path)
   }
 
-  if (rlang::is_interactive() && !create && ask) {
+  if (is_interactive() && !create && ask) {
     create <-
       cliExtras::cli_yesno(
         c(
@@ -96,14 +96,13 @@ get_data_dir <- function(path = NULL,
 #' @param ... Additional parameters passed to [list.files()] by
 #'   [list_path_filenames()].
 #' @export
-#' @importFrom rlang caller_env check_required has_name
 list_path_filenames <- function(path,
                                 fileext = NULL,
                                 pattern = NULL,
                                 full.names = TRUE,
                                 call = caller_env(),
                                 ...) {
-  rlang::check_required(path, call = call)
+  check_required(path, call = call)
   if (is.data.frame(path) && rlang::has_name(path, "path")) {
     path <- path[["path"]]
   }

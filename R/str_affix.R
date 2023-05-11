@@ -43,7 +43,7 @@ str_affix <- function(string = NULL,
   string <- str_pad_digits(string, pad = pad, width = width)
 
   if (use_clean_names) {
-    rlang::check_installed("janitor")
+    check_installed("janitor")
     # FIXME: make_clean_names has an optional prefix and postfix parameter - can
     # I use those instead of the custom str_fix functions
     string <- janitor::make_clean_names(string, use_make_names = use_make_names)
@@ -122,7 +122,7 @@ str_prefix <- function(string = NULL,
   }
 
   if (use_clean_names) {
-    rlang::check_installed("janitor")
+    check_installed("janitor")
 
     prefix <-
       janitor::make_clean_names(

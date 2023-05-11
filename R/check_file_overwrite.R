@@ -32,7 +32,7 @@ check_file_overwrite <- function(filename = NULL,
   }
 
   if (file.exists(filepath)) {
-    if (!overwrite && ask && rlang::is_interactive()) {
+    if (!overwrite && ask && is_interactive()) {
       path <- dirname(filepath)
       overwrite <-
         cliExtras::cli_yesno(
