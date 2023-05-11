@@ -37,13 +37,13 @@ exif_xwalk <-
 #' @importFrom rlang has_name
 read_exif <- function(path = NULL,
                       fileext = NULL,
-                      tags = getOption("read_exif.tags", default = default_tags),
+                      tags = NULL,
                       ...) {
-  rlang::check_installed("exiftoolr")
+  check_installed("exiftoolr")
 
   filenames <- list_path_filenames(path, fileext)
 
-  if (length(filenames) == 0) {
+  if (has_length(filenames, 0)) {
     text <- "No files found at {.arg path}: {.path {path}}"
     if (!is.null(fileext)) {
       text <- "No {.val {fileext}} files found at {.arg path}: {.path {path}}"
@@ -51,6 +51,8 @@ read_exif <- function(path = NULL,
     cli::cli_alert_warning(text, wrap = TRUE)
     return(invisible(NULL))
   }
+
+  tags <- tags %||% getOption("read_exif.tags", default = default_tags)
 
   # FIXME: This is a partial list of filetypes that support GPS EXIF metadata
   # fileext <- match.arg(fileext, c("jpg", "jpeg", "png", "tiff", "pdf"))
@@ -70,8 +72,8 @@ read_exif <- function(path = NULL,
 
 #' @noRd
 fmt_exif_data <- function(data) {
-  rlang::check_installed("dplyr")
-  rlang::check_installed("janitor")
+  check_installed("dplyr")
+  check_installed("janitor")
 
   data <-
     # Rename variables
@@ -138,7 +140,7 @@ write_exif <- function(path,
                        overwrite = TRUE,
                        append_keywords = FALSE,
                        call = caller_env()) {
-  rlang::check_installed("exiftoolr")
+  check_installed("exiftoolr")
 
   # if (!is.null(metadata) && is.data.frame(metadata)) {
   #
@@ -251,7 +253,7 @@ write_exif <- function(path,
 #'
 #' @noRd
 walk2_write_exif <- function(path, replacement_vals, tag = "keywords") {
-  rlang::check_installed("purrr")
+  check_installed("purrr")
 
   if (tag == "keywords") {
     purrr::walk2(

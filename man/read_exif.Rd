@@ -6,12 +6,7 @@
 \title{Read EXIF metadata to create a simple feature object or write
 EXIF metadata to image files}
 \usage{
-read_exif(
-  path = NULL,
-  fileext = NULL,
-  tags = getOption("read_exif.tags", default = default_tags),
-  ...
-)
+read_exif(path = NULL, fileext = NULL, tags = NULL, ...)
 
 write_exif(
   path,
