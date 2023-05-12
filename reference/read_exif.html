@@ -93,9 +93,11 @@ IPTC:Caption-Abstract</p></li>
 <span>  keywords <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  description <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  alt <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  metadata <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  args <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  append_keywords <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -153,6 +155,13 @@ working).  Defaults to <code>NULL</code>.</p></dd>
 "iTXt" (PNG files only) tags. Defaults to <code>NULL</code>.</p></dd>
 
 
+<dt>metadata</dt>
+<dd><p>Any of the other metadata parameters (title, author, credit,
+date, keywords, description, and alt) can also be set by passing a named
+list or data.frame to metadata. If an argument is supplied, any conflicting
+value in metadata is ignored.</p></dd>
+
+
 <dt>args</dt>
 <dd><p>Alternate arguments passed to <code><a href="https://rdrr.io/pkg/exiftoolr/man/exif_call.html" class="external-link">exiftoolr::exif_call()</a></code>. Other tag
 parameters are appended to args if they are not <code>NULL</code>.</p></dd>
@@ -166,6 +175,10 @@ the provided fields; defaults to <code>TRUE</code></p></dd>
 <dt>append_keywords</dt>
 <dd><p>If <code>TRUE</code>, append keywords, if <code>FALSE</code>, replace
 keywords in file metadata.</p></dd>
+
+
+<dt>quiet</dt>
+<dd><p>If <code>TRUE</code> (default), suppress function messages.</p></dd>
 
 
 <dt>call</dt>
