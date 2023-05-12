@@ -34,7 +34,7 @@ list_path_filenames(
 not \code{NULL}, the path is returned even if cache is \code{TRUE}.}
 
 \item{create}{If \code{FALSE} and path does not exist, return path with a warning.
-If \code{TRUE} and \code{\link[=is_interactive]{is_interactive()}} is \code{TRUE}, ask user if directory
+If \code{TRUE} and \code{\link[rlang:is_interactive]{rlang::is_interactive()}} is \code{TRUE}, ask user if directory
 should be created. If the session not interactive and create is \code{TRUE}, a
 new directory will be created.}
 

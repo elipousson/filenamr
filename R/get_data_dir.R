@@ -9,7 +9,7 @@
 #'   [rappdirs::user_cache_dir()] (using value of pkg as appname). If path is
 #'   not `NULL`, the path is returned even if cache is `TRUE`.
 #' @param create If `FALSE` and path does not exist, return path with a warning.
-#'   If `TRUE` and [is_interactive()] is `TRUE`, ask user if directory
+#'   If `TRUE` and [rlang::is_interactive()] is `TRUE`, ask user if directory
 #'   should be created. If the session not interactive and create is `TRUE`, a
 #'   new directory will be created.
 #' @param appname,pkg pkg is used if appname is NULL. Passed to
