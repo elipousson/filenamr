@@ -18,9 +18,11 @@ write_exif(
   keywords = NULL,
   description = NULL,
   alt = NULL,
+  metadata = NULL,
   args = NULL,
   overwrite = TRUE,
   append_keywords = FALSE,
+  quiet = FALSE,
   call = caller_env()
 )
 }
@@ -54,6 +56,11 @@ working).  Defaults to \code{NULL}.}
 \item{alt}{Text to pass as alt text to the "IPTC:AltTextAccessibility" and
 "iTXt" (PNG files only) tags. Defaults to \code{NULL}.}
 
+\item{metadata}{Any of the other metadata parameters (title, author, credit,
+date, keywords, description, and alt) can also be set by passing a named
+list or data.frame to metadata. If an argument is supplied, any conflicting
+value in metadata is ignored.}
+
 \item{args}{Alternate arguments passed to \code{\link[exiftoolr:exif_call]{exiftoolr::exif_call()}}. Other tag
 parameters are appended to args if they are not \code{NULL}.}
 
@@ -62,6 +69,8 @@ the provided fields; defaults to \code{TRUE}}
 
 \item{append_keywords}{If \code{TRUE}, append keywords, if \code{FALSE}, replace
 keywords in file metadata.}
+
+\item{quiet}{If \code{TRUE} (default), suppress function messages.}
 
 \item{call}{The execution environment of a currently
 running function, e.g. \code{caller_env()}. The function will be
