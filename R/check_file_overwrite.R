@@ -55,7 +55,7 @@ check_file_overwrite <- function(filename = NULL,
     )
 
     cli::cli_alert_success(
-      "Removing {.path {filename}}"
+      "Removing existing {.path {filename}}"
     )
 
     file.remove(filepath)
