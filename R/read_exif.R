@@ -1,23 +1,11 @@
-exif_xwalk <-
-  list(
-    "img_description" = "image_description",
-    "lon" = "longitude",
-    "lat" = "latitude",
-    "lon_ref" = "longitude_ref",
-    "lat_ref" = "latitude_ref",
-    "path" = "source_file",
-    "img_width" = "image_width",
-    "img_height" = "image_height",
-    "exif_orientation" = "orientation"
-  )
-
 #' Read EXIF metadata to create a simple feature object or write
 #' EXIF metadata to image files
 #'
 #' @description
-#' [read_exif()] read EXIF data from folder of files. This function also assigns
+#' [read_exif()] read EXIF data from folder of files. Optionally assigns
 #' a cardinal direction based on the direction metadata and recodes the
-#' orientation metadata.
+#' orientation metadata. Note that tags must include GPS tags if you plan to
+#' create an `sf` object based on the resulting data.frame object.
 #'
 #' For [write_exif()] the parameters are used to multiple tags with the same
 #' values:
@@ -29,15 +17,29 @@ exif_xwalk <-
 #'
 #' @param path A path to folder or file.
 #' @param fileext The file extension or file type; defaults to `NULL`.
-#' @param tags Optional list of EXIF tags to read from files. Must include GPS
-#'   tags if to create an `sf` object based on the resulting data.frame object.
-#' @param ... Additional EXIF tags to pass to [exiftoolr::exif_read()]
+#' @param tags List of EXIF tags to read from files. If
+#'   `NULL` (default), set to option "filenamr.exif_tags" or default
+#'   `default_exif_tags`.
+#' @param format_exif If `TRUE` (default), rename columns based on xwalk values,
+#'   add cardinal directions based on bearing, and format date columns.
+#' @param xwalk If `NULL`, set to option "filenamr.exif_xwalk" or default
+#'   `default_exif_xwalk`.
+#' @param tz Time zone to pass to [lubridate::ymd_hms()] if format_exif is
+#'   `TRUE`. Typically set to `Sys.timezone()` to convert date/time columns.
+#' @inheritParams tibble::as_tibble
+#' @param ... Additional parameters to pass to [exiftoolr::exif_read()]
+#' @returns A tibble of EXIF and other metadata from files located in the path
+#'   directory.
 #' @export
 #' @importFrom cli cli_abort cli_warn
 #' @importFrom rlang has_name
 read_exif <- function(path = NULL,
                       fileext = NULL,
                       tags = NULL,
+                      format_exif = TRUE,
+                      xwalk = NULL,
+                      tz = NULL,
+                      .name_repair = "check_unique",
                       ...) {
   check_installed("exiftoolr")
 
@@ -52,7 +54,7 @@ read_exif <- function(path = NULL,
     return(invisible(NULL))
   }
 
-  tags <- tags %||% getOption("read_exif.tags", default = default_tags)
+  tags <- tags %||% getOption("filenamr.exif_tags", default = default_exif_tags)
 
   # FIXME: This is a partial list of filetypes that support GPS EXIF metadata
   # fileext <- match.arg(fileext, c("jpg", "jpeg", "png", "tiff", "pdf"))
@@ -60,30 +62,28 @@ read_exif <- function(path = NULL,
   # FIXME: Figure out how to append path to the end of the table not the
   # beginning
   data <-
-    suppressMessages(
-      exiftoolr::exif_read(
-        filenames,
-        tags = tags
-      )
+    exiftoolr::exif_read(
+      path = filenames,
+      tags = tags,
+      ...
     )
 
-  fmt_exif_data(data)
-}
-
-#' @noRd
-fmt_exif_data <- function(data) {
-  check_installed("dplyr")
-  check_installed("janitor")
+  check_installed(c("tibble", "dplyr", "lubridate"))
 
   data <-
-    # Rename variables
-    # FIXME: Is it possible to move this to the exif_xwalk?
-    dplyr::rename_with(
-      janitor::clean_names(data),
-      ~ sub("^gps_", "", .x)
+    tibble::as_tibble(
+      data,
+      .name_repair = .name_repair
     )
 
-  xwalk <- exif_xwalk[has_name(data, exif_xwalk)]
+  if (!format_exif) {
+    return(data)
+  }
+
+  xwalk <- xwalk %||%
+    getOption("filenamr.exif_xwalk", default = default_exif_xwalk)
+
+  xwalk <- xwalk[has_name(data, xwalk)]
 
   data <-
     # Rename variables
@@ -92,6 +92,19 @@ fmt_exif_data <- function(data) {
       ~ names(xwalk)[which(xwalk == .x)],
       .cols = dplyr::all_of(as.character(xwalk))
     )
+
+  if (!is_null(tz)) {
+    data <-
+      dplyr::mutate(
+        data,
+        dplyr::across(
+          dplyr::contains(c("Date", "date")),
+          function(x) {
+            lubridate::ymd_hms(x, tz = tz)
+          }
+        )
+      )
+  }
 
   data <- fmt_exif_orientation(data)
 
@@ -199,35 +212,45 @@ write_exif <- function(path,
 #' Pass file path and replacement tag values to write_exif based on selected tag
 #'
 #' @noRd
-walk2_write_exif <- function(path, replacement_vals, tag = "keywords") {
-  check_installed("purrr")
+walk2_write_exif <- function(path,
+                             replacement_vals,
+                             tag = "keywords") {
+  walk_vars <- set_names(replacement_vals, path)
 
   if (tag == "keywords") {
-    purrr::walk2(
-      path,
-      replacement_vals,
-      ~ write_exif(
-        path = .x, keywords = .y,
-        overwrite = TRUE, append_keywords = FALSE
-      )
+    walk(
+      seq_along(walk_vars),
+      function(i) {
+        write_exif(
+          path = names(walk_vars)[i], keywords = walk_vars[[i]],
+          overwrite = TRUE,
+          append_keywords = FALSE
+        )
+      }
     )
-  } else if (tag == "title") {
-    purrr::walk2(
-      path,
-      replacement_vals,
-      ~ write_exif(
-        path = .x, title = .y,
-        overwrite = TRUE
-      )
+  }
+
+  if (tag == "title") {
+    walk(
+      seq_along(walk_vars),
+      function(i) {
+        write_exif(
+          path = names(walk_vars)[i], title = walk_vars[[i]],
+          overwrite = TRUE
+        )
+      }
     )
-  } else if (tag == "description") {
-    purrr::walk2(
-      path,
-      replacement_vals,
-      ~ write_exif(
-        path = .x, description = .y,
-        overwrite = TRUE
-      )
+  }
+
+  if (tag == "description") {
+    walk(
+      seq_along(walk_vars),
+      function(i) {
+        write_exif(
+          path = names(walk_vars)[i], description = walk_vars[[i]],
+          overwrite = TRUE
+        )
+      }
     )
   }
 }

@@ -6,7 +6,16 @@
 \title{Read EXIF metadata to create a simple feature object or write
 EXIF metadata to image files}
 \usage{
-read_exif(path = NULL, fileext = NULL, tags = NULL, ...)
+read_exif(
+  path = NULL,
+  fileext = NULL,
+  tags = NULL,
+  format_exif = TRUE,
+  xwalk = NULL,
+  tz = NULL,
+  .name_repair = "check_unique",
+  ...
+)
 
 write_exif(
   path,
@@ -31,10 +40,36 @@ write_exif(
 
 \item{fileext}{The file extension or file type; defaults to \code{NULL}.}
 
-\item{tags}{Optional list of EXIF tags to read from files. Must include GPS
-tags if to create an \code{sf} object based on the resulting data.frame object.}
+\item{tags}{List of EXIF tags to read from files. If
+\code{NULL} (default), set to option "filenamr.exif_tags" or default
+\code{default_exif_tags}.}
 
-\item{...}{Additional EXIF tags to pass to \code{\link[exiftoolr:exif_read]{exiftoolr::exif_read()}}}
+\item{format_exif}{If \code{TRUE} (default), rename columns based on xwalk values,
+add cardinal directions based on bearing, and format date columns.}
+
+\item{xwalk}{If \code{NULL}, set to option "filenamr.exif_xwalk" or default
+\code{default_exif_xwalk}.}
+
+\item{tz}{Time zone to pass to \code{\link[lubridate:ymd_hms]{lubridate::ymd_hms()}} if format_exif is
+\code{TRUE}. Typically set to \code{Sys.timezone()} to convert date/time columns.}
+
+\item{.name_repair}{Treatment of problematic column names:
+\itemize{
+\item \code{"minimal"}: No name repair or checks, beyond basic existence,
+\item \code{"unique"}: Make sure names are unique and not empty,
+\item \code{"check_unique"}: (default value), no name repair, but check they are
+\code{unique},
+\item \code{"universal"}: Make the names \code{unique} and syntactic
+\item a function: apply custom name repair (e.g., \code{.name_repair = make.names}
+for names in the style of base R).
+\item A purrr-style anonymous function, see \code{\link[rlang:as_function]{rlang::as_function()}}
+}
+
+This argument is passed on as \code{repair} to \code{\link[vctrs:vec_as_names]{vctrs::vec_as_names()}}.
+See there for more details on these terms and the strategies used
+to enforce them.}
+
+\item{...}{Additional parameters to pass to \code{\link[exiftoolr:exif_read]{exiftoolr::exif_read()}}}
 
 \item{title}{Title to add to file metadata with exiftoolr, Default: \code{NULL}.}
 
@@ -77,10 +112,15 @@ running function, e.g. \code{caller_env()}. The function will be
 mentioned in error messages as the source of the error. See the
 \code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 }
+\value{
+A tibble of EXIF and other metadata from files located in the path
+directory.
+}
 \description{
-\code{\link[=read_exif]{read_exif()}} read EXIF data from folder of files. This function also assigns
+\code{\link[=read_exif]{read_exif()}} read EXIF data from folder of files. Optionally assigns
 a cardinal direction based on the direction metadata and recodes the
-orientation metadata.
+orientation metadata. Note that tags must include GPS tags if you plan to
+create an \code{sf} object based on the resulting data.frame object.
 
 For \code{\link[=write_exif]{write_exif()}} the parameters are used to multiple tags with the same
 values:
