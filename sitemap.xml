@@ -25,7 +25,10 @@
     <loc>https://elipousson.github.io/filenamr/reference/check_path_fileext.html</loc>
   </url>
   <url>
-    <loc>https://elipousson.github.io/filenamr/reference/default_tags.html</loc>
+    <loc>https://elipousson.github.io/filenamr/reference/default_exif_tags.html</loc>
+  </url>
+  <url>
+    <loc>https://elipousson.github.io/filenamr/reference/default_exif_xwalk.html</loc>
   </url>
   <url>
     <loc>https://elipousson.github.io/filenamr/reference/filenamr-package.html</loc>
