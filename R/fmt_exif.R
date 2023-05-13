@@ -7,6 +7,7 @@
 #' @param winds Number of winds to use for results (4, 8, or 16).
 #' @param .after Column name passed to .after parameter of [dplyr::mutate()].
 #' @inheritParams rlang::args_error_context
+#' @seealso [isstatic::as_cardinal_bearing()]
 #' @export
 #' @importFrom rlang has_name
 fmt_exif_direction <- function(data, winds = 8, .after = "img_direction", call = caller_env()) {

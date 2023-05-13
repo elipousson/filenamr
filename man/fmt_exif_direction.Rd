@@ -29,3 +29,6 @@ mentioned in error messages as the source of the error. See the
 \description{
 Format a data.frame column as a cardinal direction in degrees and wind direction
 }
+\seealso{
+\code{\link[isstatic:as_cardinal_bearing]{isstatic::as_cardinal_bearing()}}
+}
