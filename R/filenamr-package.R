@@ -8,5 +8,6 @@
 #' @importFrom cliExtras cli_abort_ifnot cli_warn_ifnot cli_inform_ifnot
 #'   cli_yesno
 #' @importFrom glue glue
+#' @importFrom utils data globalVariables
 ## usethis namespace: end
 NULL

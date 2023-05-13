@@ -19,7 +19,8 @@ Imports:
     cliExtras (>= 0.1.0),
     glue,
     rappdirs,
-    rlang
+    rlang,
+    utils
 Suggests: 
     covr,
     dplyr,

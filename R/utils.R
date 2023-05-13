@@ -9,7 +9,7 @@
 .onLoad <- function(libname, pkgname) {
   utils::data(
     list = c(
-      "default_tags"
+      "default_exif_tags", "default_exif_xwalk"
     ),
     package = pkgname,
     envir = parent.env(environment())
