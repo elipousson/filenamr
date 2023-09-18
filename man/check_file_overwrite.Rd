@@ -10,6 +10,7 @@ check_file_overwrite(
   overwrite = TRUE,
   quiet = FALSE,
   ask = TRUE,
+  .envir = caller_env(),
   call = caller_env()
 )
 }

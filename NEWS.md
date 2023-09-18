@@ -1,4 +1,6 @@
-<!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
+# filenamr (development)
+
+- Fix issue with `check_file_overwrite()` caused by missing .envir parameter (2023-09-18)
 
 # filenamr 0.1.0.9002 (2023-04-06)
 

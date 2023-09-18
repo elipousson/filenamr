@@ -7,15 +7,17 @@
 check_path_fileext(
   path,
   fileext = NULL,
-  message = "{.arg path} must include a file extension.",
+  message = "{.arg {arg}} must have a file extension.",
+  arg = caller_arg(path),
   call = caller_env()
 )
 }
 \arguments{
-\item{path}{File path to check. Required.}
+\item{path}{Character vector with file path or paths to check. Required.}
 
-\item{fileext}{Optional file extension. If \code{NULL}, path must have a file
-extension. If a character string, path must have a matching file extension.}
+\item{fileext}{Optional file extension string. If \code{NULL}, path must have a
+file extension. If fileext is a character string, all elements of path must
+have a matching file extension.}
 
 \item{message}{It is formatted via a call to \code{\link[cli:cli_bullets]{cli_bullets()}}.}
 
@@ -34,5 +36,7 @@ respectively not display any call or hard-code a code to display.
 For more information about error calls, see \ifelse{html}{\link[rlang:topic-error-call]{Including function calls in error messages}}{\link[rlang:topic-error-call]{Including function calls in error messages}}.}
 }
 \description{
-Check if a file path has a file extension
+\code{\link[=check_path_fileext]{check_path_fileext()}} checks if a character vector of file paths have a file
+extension or a specified file extension. Errors if any elements of do not
+pass the condition.
 }
