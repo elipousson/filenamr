@@ -8,6 +8,7 @@
 #' @param quiet If `TRUE`, suppress informational messages, Default: `FALSE`
 #' @param ask If `TRUE`, overwrite is `FALSE`, and session is interactive, ask
 #'   if user wants to overwrite the file. Default: `TRUE`
+#' @param .envir Ignored at present.
 #' @inheritParams cliExtras::cli_ifnot
 #' @inheritParams rlang::args_error_context
 #' @rdname check_file_overwrite
