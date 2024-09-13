@@ -1,3 +1,19 @@
+# ---
+# repo: r-lib/rlang
+# file: standalone-cli.R
+# last-updated: 2023-10-06
+# license: https://unlicense.org
+# imports: [rlang, cli, rappdirs]
+# ---
+#
+#
+# ## Changelog
+#
+# 2024-09-12:
+# * Initial setup.
+#
+# nocov start
+
 #' Check if data directory exists and create a new directory if needed
 #'
 #' Get the path for a package-specific cache directory with
@@ -50,7 +66,7 @@ get_data_dir <- function(path = NULL,
       return(invisible(path))
     }
 
-    cli_abort(
+    cli::cli_abort(
       "{.arg path} can't be {.val NULL} when {.code allow_null = FALSE}",
       call = call
     )
@@ -63,14 +79,13 @@ get_data_dir <- function(path = NULL,
     return(path)
   }
 
-  if (is_interactive() && !create && ask) {
-    create <-
-      cliExtras::cli_yesno(
-        c(
-          "x" = "The directory {.file {path}} can't be found.",
-          ">" = "Do you want to create a directory at this location?"
-        )
+  if (is_interactive() && !create && ask && is_installed("cliExtras")) {
+    create <- cliExtras::cli_yesno(
+      c(
+        "x" = "The directory {.file {path}} can't be found.",
+        ">" = "Do you want to create a directory at this location?"
       )
+    )
   }
 
   if (!create) {
@@ -87,6 +102,7 @@ get_data_dir <- function(path = NULL,
   dir.create(path)
   invisible(path)
 }
+
 
 #' @name list_path_filenames
 #' @rdname get_data_dir
@@ -129,3 +145,5 @@ list_path_filenames <- function(path,
     call = call
   )
 }
+
+# nocov end
