@@ -8,6 +8,7 @@
 #' @param quiet If `TRUE`, suppress informational messages, Default: `FALSE`
 #' @param ask If `TRUE`, overwrite is `FALSE`, and session is interactive, ask
 #'   if user wants to overwrite the file. Default: `TRUE`
+#' @inheritParams cliExtras::cli_ifnot
 #' @inheritParams rlang::args_error_context
 #' @rdname check_file_overwrite
 #' @export
@@ -45,15 +46,18 @@ check_file_overwrite <- function(filename = NULL,
         )
     }
 
-    cli_ifnot(
-      overwrite,
-      text = c(
-        "!" = "{.file {filename}} can't be saved.",
-        "i" = "A file with the same name already exists.
+    if (!overwrite) {
+      cli::cli_bullets(
+        c(
+          "!" = "{.file {filename}} can't be saved.",
+          "i" = "A file with the same name already exists.
         Set {.code overwrite = TRUE} to remove."
-      ),
-      .fn = cli::cli_bullets
-    )
+        )
+      )
+
+      return(invisible(NULL))
+    }
+
 
     cli::cli_alert_success(
       "Removing existing {.path {filename}}"
@@ -76,6 +80,7 @@ check_file_overwrite <- function(filename = NULL,
 #'   file extension. If fileext is a character string, all elements of path must
 #'   have a matching file extension.
 #' @inheritParams cliExtras::cli_abort_ifnot
+#' @inheritParams rlang::args_error_context
 #' @export
 check_path_fileext <- function(path,
                                fileext = NULL,

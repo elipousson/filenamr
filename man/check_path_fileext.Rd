@@ -21,6 +21,10 @@ have a matching file extension.}
 
 \item{message}{It is formatted via a call to \code{\link[cli:cli_bullets]{cli_bullets()}}.}
 
+\item{arg}{An argument name as a string. This argument
+will be mentioned in error messages as the input that is at the
+origin of a problem.}
+
 \item{call}{The execution environment of a currently running
 function, e.g. \code{call = caller_env()}. The corresponding function
 call is retrieved and mentioned in error messages as the source
