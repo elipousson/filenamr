@@ -1,5 +1,10 @@
 test_that("read_exif and write_exif works", {
   skip_on_ci()
+
+  exiftool_v <- exiftoolr::exif_version()
+
+  skip_if_not(is.character(exiftool_v))
+
   path <- system.file("images", package = "exiftoolr")
 
   photos <- read_exif(path)
