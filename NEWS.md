@@ -1,6 +1,8 @@
 # filenamr (development)
 
 - Fix issue with `check_file_overwrite()` caused by missing .envir parameter (2023-09-18)
+- Relocate `get_data_dir()` and related functions to standalone script (2024-09-12)
+- Fix issue with tests depending on ExifTool (2024-09-17)
 
 # filenamr 0.1.0.9002 (2023-04-06)
 
