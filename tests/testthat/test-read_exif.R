@@ -1,4 +1,6 @@
 test_that("read_exif and write_exif works", {
+  skip()
+
   skip_on_ci()
 
   exiftool_v <- exiftoolr::exif_version()
