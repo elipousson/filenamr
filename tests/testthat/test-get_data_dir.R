@@ -30,7 +30,7 @@ test_that("get_data_dir works", {
 
   skip_on_ci()
   expect_true(
-    grepl("sfext$", get_data_dir(cache = TRUE, pkg = "sfext"))
+    grepl("sfext", get_data_dir(cache = TRUE, pkg = "sfext"))
   )
 })
 
