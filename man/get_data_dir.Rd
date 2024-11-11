@@ -14,6 +14,7 @@ get_data_dir(
   pkg = NULL,
   allow_null = TRUE,
   quiet = FALSE,
+  recursive = TRUE,
   call = caller_env()
 )
 
@@ -48,6 +49,9 @@ create directory if the provided directory does not exist.}
 \code{NULL} path value; defaults to \code{TRUE}.}
 
 \item{quiet}{If \code{TRUE}, suppress informational messages.}
+
+\item{recursive}{logical. Should elements of the path other than the
+    last be created?  If true, like the Unix command \command{mkdir -p}.}
 
 \item{call}{The execution environment of a currently
 running function, e.g. \code{caller_env()}. The function will be

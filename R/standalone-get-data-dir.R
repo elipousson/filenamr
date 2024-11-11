@@ -9,6 +9,10 @@
 #
 # ## Changelog
 #
+# 2024-11-11:
+# * Fix issue with `get_data_dir()` on Windows by setting `dir.create(recursive =
+# TRUE)`. `recursive` is exposed to allow overrides.
+#
 # 2024-09-12:
 # * Initial setup.
 #
@@ -35,6 +39,7 @@
 #' @param ask If `TRUE`, create is `FALSE`, and session is interactive, ask to
 #'   create directory if the provided directory does not exist.
 #' @param quiet If `TRUE`, suppress informational messages.
+#' @inheritParams base::dir.create
 #' @inheritParams rlang::args_error_context
 #' @export
 #' @importFrom cliExtras cli_yesno
@@ -49,6 +54,7 @@ get_data_dir <- function(path = NULL,
                          pkg = NULL,
                          allow_null = TRUE,
                          quiet = FALSE,
+                         recursive = TRUE,
                          call = caller_env()) {
   appname <- appname %||% pkg
   cli_quiet(quiet)
@@ -99,7 +105,7 @@ get_data_dir <- function(path = NULL,
     "New directory created at {.file {path}}"
   )
 
-  dir.create(path)
+  dir.create(path, recursive = recursive)
   invisible(path)
 }
 
