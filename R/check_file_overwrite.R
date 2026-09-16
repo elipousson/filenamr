@@ -14,13 +14,15 @@
 #' @rdname check_file_overwrite
 #' @export
 #' @importFrom rlang caller_env is_interactive
-check_file_overwrite <- function(filename = NULL,
-                                 path = NULL,
-                                 overwrite = TRUE,
-                                 quiet = FALSE,
-                                 ask = TRUE,
-                                 .envir = caller_env(),
-                                 call = caller_env()) {
+check_file_overwrite <- function(
+  filename = NULL,
+  path = NULL,
+  overwrite = TRUE,
+  quiet = FALSE,
+  ask = TRUE,
+  .envir = caller_env(),
+  call = caller_env()
+) {
   cli_quiet(quiet)
   filepath <- set_file_path(filename, path)
 
@@ -43,7 +45,8 @@ check_file_overwrite <- function(filename = NULL,
             "i" = "A file with the same name exists at {.path {path}}",
             ">" = "Do you want to overwrite {.val {filename}}?"
           ),
-          n_yes = 1, n_no = 1
+          n_yes = 1,
+          n_no = 1
         )
     }
 
@@ -58,7 +61,6 @@ check_file_overwrite <- function(filename = NULL,
 
       return(invisible(NULL))
     }
-
 
     cli::cli_alert_success(
       "Removing existing {.path {filename}}"
@@ -83,11 +85,13 @@ check_file_overwrite <- function(filename = NULL,
 #' @inheritParams cliExtras::cli_abort_ifnot
 #' @inheritParams rlang::args_error_context
 #' @export
-check_path_fileext <- function(path,
-                               fileext = NULL,
-                               message = "{.arg {arg}} must have a file extension.",
-                               arg = caller_arg(path),
-                               call = caller_env()) {
+check_path_fileext <- function(
+  path,
+  fileext = NULL,
+  message = "{.arg {arg}} must have a file extension.",
+  arg = caller_arg(path),
+  call = caller_env()
+) {
   check_character(path, call = call)
   check_string(fileext, allow_null = TRUE, call = call)
   cli_abort_ifnot(

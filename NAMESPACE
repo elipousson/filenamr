@@ -18,32 +18,40 @@ export(str_affix)
 export(str_prefix)
 export(write_exif)
 import(rlang)
-importFrom(cli,cli_abort)
-importFrom(cli,cli_alert_danger)
-importFrom(cli,cli_alert_success)
-importFrom(cli,cli_alert_warning)
-importFrom(cli,cli_bullets)
-importFrom(cli,cli_inform)
-importFrom(cli,cli_warn)
-importFrom(cliExtras,cli_abort_ifnot)
-importFrom(cliExtras,cli_inform_ifnot)
-importFrom(cliExtras,cli_list_files)
-importFrom(cliExtras,cli_warn_ifnot)
-importFrom(cliExtras,cli_yesno)
+importFrom(cli,
+  cli_abort,
+  cli_alert_danger,
+  cli_alert_success,
+  cli_alert_warning,
+  cli_bullets,
+  cli_inform,
+  cli_warn
+)
+importFrom(cliExtras,
+  cli_abort_ifnot,
+  cli_inform_ifnot,
+  cli_list_files,
+  cli_warn_ifnot,
+  cli_yesno
+)
 importFrom(glue,glue)
 importFrom(rappdirs,user_cache_dir)
-importFrom(rlang,"%||%")
-importFrom(rlang,as_function)
-importFrom(rlang,caller_env)
-importFrom(rlang,check_installed)
-importFrom(rlang,global_env)
-importFrom(rlang,has_name)
-importFrom(rlang,inject)
-importFrom(rlang,is_empty)
-importFrom(rlang,is_false)
-importFrom(rlang,is_installed)
-importFrom(rlang,is_interactive)
-importFrom(rlang,is_null)
-importFrom(rlang,set_names)
-importFrom(utils,data)
-importFrom(utils,globalVariables)
+importFrom(rlang,
+  "%||%",
+  as_function,
+  caller_env,
+  check_installed,
+  global_env,
+  has_name,
+  inject,
+  is_empty,
+  is_false,
+  is_installed,
+  is_interactive,
+  is_null,
+  set_names
+)
+importFrom(utils,
+  data,
+  globalVariables
+)

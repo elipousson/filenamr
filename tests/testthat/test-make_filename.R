@@ -51,5 +51,9 @@ test_that("make_filename warns", {
     "`filename` is ignored if a `name` argument is provided."
   )
   expect_warning(make_filename(filename = "data.csv", label = "source"))
-  expect_warning(make_filename(filename = "data.csv", path = "folder", create = FALSE))
+  expect_warning(make_filename(
+    filename = "data.csv",
+    path = "folder",
+    create = FALSE
+  ))
 })

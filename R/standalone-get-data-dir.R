@@ -46,16 +46,18 @@
 #' @importFrom rlang check_installed is_interactive
 #' @importFrom cli cli_alert_warning cli_alert_success
 #' @importFrom rappdirs user_cache_dir
-get_data_dir <- function(path = NULL,
-                         cache = FALSE,
-                         create = TRUE,
-                         ask = TRUE,
-                         appname = NULL,
-                         pkg = NULL,
-                         allow_null = TRUE,
-                         quiet = FALSE,
-                         recursive = TRUE,
-                         call = caller_env()) {
+get_data_dir <- function(
+  path = NULL,
+  cache = FALSE,
+  create = TRUE,
+  ask = TRUE,
+  appname = NULL,
+  pkg = NULL,
+  allow_null = TRUE,
+  quiet = FALSE,
+  recursive = TRUE,
+  call = caller_env()
+) {
   appname <- appname %||% pkg
   cli_quiet(quiet)
 
@@ -118,12 +120,14 @@ get_data_dir <- function(path = NULL,
 #' @param ... Additional parameters passed to [list.files()] by
 #'   [list_path_filenames()].
 #' @export
-list_path_filenames <- function(path,
-                                fileext = NULL,
-                                pattern = NULL,
-                                full.names = TRUE,
-                                call = caller_env(),
-                                ...) {
+list_path_filenames <- function(
+  path,
+  fileext = NULL,
+  pattern = NULL,
+  full.names = TRUE,
+  call = caller_env(),
+  ...
+) {
   check_required(path, call = call)
   if (is.data.frame(path) && rlang::has_name(path, "path")) {
     path <- path[["path"]]
@@ -145,7 +149,8 @@ list_path_filenames <- function(path,
   }
 
   cli_abort(
-    c("A valid file or directory {.arg path} must be provided.",
+    c(
+      "A valid file or directory {.arg path} must be provided.",
       "i" = "The provided {.arg path} {.file {path}} does not exist."
     ),
     call = call

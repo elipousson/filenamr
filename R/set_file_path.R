@@ -17,11 +17,13 @@
 #' @export
 #' @importFrom cli cli_alert_danger
 #' @importFrom rlang is_false is_null
-set_file_path <- function(filename = NULL,
-                          path = NULL,
-                          fileext = NULL,
-                          allow_null = FALSE,
-                          call = caller_env()) {
+set_file_path <- function(
+  filename = NULL,
+  path = NULL,
+  fileext = NULL,
+  allow_null = FALSE,
+  call = caller_env()
+) {
   check_string(filename, allow_null = TRUE, call = call)
   check_string(path, allow_null = TRUE, call = call)
 

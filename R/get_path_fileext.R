@@ -15,11 +15,13 @@
 #' @inheritParams rlang::args_error_context
 #' @export
 #' @importFrom cli cli_bullets
-get_path_fileext <- function(path,
-                             fileext = NULL,
-                             n = 1,
-                             quiet = FALSE,
-                             call = caller_env()) {
+get_path_fileext <- function(
+  path,
+  fileext = NULL,
+  n = 1,
+  quiet = FALSE,
+  call = caller_env()
+) {
   cli_quiet(quiet)
 
   if (!is.null(fileext)) {
@@ -58,10 +60,12 @@ get_path_fileext <- function(path,
 #' @param ... Additional parameters passed by [list_path_fileext()] to
 #'   [list.files()].
 #' @export
-list_path_fileext <- function(path,
-                              allow_null = FALSE,
-                              call = caller_env(),
-                              ...) {
+list_path_fileext <- function(
+  path,
+  allow_null = FALSE,
+  call = caller_env(),
+  ...
+) {
   file_list <- NULL
   check_string(path, call = call)
 
@@ -77,7 +81,8 @@ list_path_fileext <- function(path,
 
   cli_if(
     x = is.null(file_list),
-    c("A valid file or directory {.arg path} must be supplied.",
+    c(
+      "A valid file or directory {.arg path} must be supplied.",
       "i" = "{.arg path} {.path {path}} does not exist."
     ),
     .fn = cli::cli_abort,

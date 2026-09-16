@@ -14,9 +14,11 @@
 #' @returns A named numeric vector with cardinal bearings (and wind names) or a
 #'   data.frame with an added column containing the cardinal bearings.
 #' @noRd
-as_cardinal_bearing <- function(x,
-                                winds = 8,
-                                cols = c("bearing", "cardinal_bearing")) {
+as_cardinal_bearing <- function(
+  x,
+  winds = 8,
+  cols = c("bearing", "cardinal_bearing")
+) {
   if (is.data.frame(x)) {
     static_check_name(x, cols[1])
     x[[cols[2]]] <- as_cardinal_bearing(x[[cols[1]]], winds)
@@ -41,13 +43,23 @@ as_cardinal_bearing <- function(x,
 
 cardinal_bearings <-
   c(
-    "N" = 0, "N" = 360, "E" = 90,
-    "S" = 180, "W" = 270,
-    "NE" = 45, "SE" = 135,
-    "SW" = 225, "NW" = 315,
-    "NNE" = 22.5, "ENE" = 67.5, "ESE" = 112.5,
-    "SSE" = 157.5, "SSW" = 202.5, "WSW" = 247.5,
-    "WNW" = 292.5, "NNW" = 337.5
+    "N" = 0,
+    "N" = 360,
+    "E" = 90,
+    "S" = 180,
+    "W" = 270,
+    "NE" = 45,
+    "SE" = 135,
+    "SW" = 225,
+    "NW" = 315,
+    "NNE" = 22.5,
+    "ENE" = 67.5,
+    "ESE" = 112.5,
+    "SSE" = 157.5,
+    "SSW" = 202.5,
+    "WSW" = 247.5,
+    "WNW" = 292.5,
+    "NNW" = 337.5
   )
 
 #' Combine multiple words into a single string
@@ -61,17 +73,20 @@ cardinal_bearings <-
 #' @inherit knitr::combine_words
 #' @returns A character string
 #' @noRd
-combine_words <- function(words,
-                          sep = ", ",
-                          and = " and ",
-                          before = "",
-                          after = before,
-                          oxford_comma = TRUE) {
+combine_words <- function(
+  words,
+  sep = ", ",
+  and = " and ",
+  before = "",
+  after = before,
+  oxford_comma = TRUE
+) {
   n <- length(words)
 
-  rs <- function (x) {
-    if (is.null(x))
+  rs <- function(x) {
+    if (is.null(x)) {
       x = as.character(x)
+    }
     x
   }
 
@@ -108,10 +123,11 @@ combine_words <- function(words,
 #' @noRd
 digit_pattern <- function(pattern = "[0-9]+", side = NULL) {
   side <- match.arg(side, c("", "left", "right"))
-  switch(side,
-         "left" = paste0("^", pattern),
-         "right" = paste0(pattern, "$"),
-         pattern
+  switch(
+    side,
+    "left" = paste0("^", pattern),
+    "right" = paste0(pattern, "$"),
+    pattern
   )
 }
 
@@ -127,12 +143,14 @@ digit_pattern <- function(pattern = "[0-9]+", side = NULL) {
 #'   and no additional strings are provided to .... If `FALSE`, stop if filename
 #'   and path are `NULL` and no additional strings are provided to ...
 #' @noRd
-file_path <- function(...,
-                      path = NULL,
-                      filename = NULL,
-                      fsep = .Platform$file.sep,
-                      allow_null = FALSE,
-                      call = parent.frame()) {
+file_path <- function(
+  ...,
+  path = NULL,
+  filename = NULL,
+  fsep = .Platform$file.sep,
+  allow_null = FALSE,
+  call = parent.frame()
+) {
   path <- str_c(..., path, filename, sep = fsep)
   path_has_null <- any(identical(path, character(0)))
 
@@ -230,7 +248,9 @@ is_dir <- function(x, use_names = FALSE) {
   dirs <-
     vapply(
       x,
-      function(p) {dir.exists(p)},
+      function(p) {
+        dir.exists(p)
+      },
       FUN.VALUE = TRUE,
       USE.NAMES = use_names
     )
@@ -255,9 +275,7 @@ is_dir <- function(x, use_names = FALSE) {
 #'   values of the input vector x. Defaults to `FALSE`.
 #' @rdname is_file
 #' @noRd
-is_file <- function(x,
-                    include_dirs = FALSE,
-                    use_names = FALSE) {
+is_file <- function(x, include_dirs = FALSE, use_names = FALSE) {
   if (is.null(x)) {
     return(FALSE)
   }
@@ -291,19 +309,22 @@ is_fileext_path <- function(x, fileext, ignore.case = TRUE) {
   grepl(
     paste0("\\.", paste0(fileext, collapse = "|"), "$(?!\\.)"),
     x,
-    ignore.case = ignore.case, perl = TRUE
+    ignore.case = ignore.case,
+    perl = TRUE
   )
 }
 
 #' Simple helper for pluralizing words
 #'
 #' @noRd
-plural_words <- function(words,
-                         n = 1,
-                         suffix = "s",
-                         before = "",
-                         after = "",
-                         replacement = NULL) {
+plural_words <- function(
+  words,
+  n = 1,
+  suffix = "s",
+  before = "",
+  after = "",
+  replacement = NULL
+) {
   words <- paste0(before, words, after)
 
   if (is.null(replacement)) {
@@ -338,8 +359,12 @@ static_check_name <- function(x, name = NULL, call = parent.frame()) {
   static_check_if(
     condition = has_all_names(x, name),
     message = paste0(
-      "`x` must have ", plural_words("name", length(name), after = " "), name,
-      ", but ", combine_words(name[!(name %in% names(x))]), " are all missing."
+      "`x` must have ",
+      plural_words("name", length(name), after = " "),
+      name,
+      ", but ",
+      combine_words(name[!(name %in% names(x))]),
+      " are all missing."
     ),
     call = call
   )
@@ -361,7 +386,9 @@ static_check_numeric <- function(x, call = parent.frame()) {
 #' @rdname str_fileext
 #' @noRd
 str_add_fileext <- function(string, fileext = NULL) {
-  if (is.null(fileext) || !is.null(fileext) && all(has_fileext(string, fileext))) {
+  if (
+    is.null(fileext) || !is.null(fileext) && all(has_fileext(string, fileext))
+  ) {
     return(string)
   }
 
@@ -399,14 +426,19 @@ str_add_fileext <- function(string, fileext = NULL) {
 str_c <- function(..., sep = "", collapse = NULL) {
   stopifnot(
     "`sep` must be a single string, not a character vector." = length(sep) == 1,
-    "`collapse` must be a single string or `NULL`, not a character vector." =
-      length(collapse) == 1 || is.null(collapse)
+    "`collapse` must be a single string or `NULL`, not a character vector." = length(
+      collapse
+    ) ==
+      1 ||
+      is.null(collapse)
   )
 
   strings <- Filter(function(x) !is.null(x), list(...))
 
   if (length(strings) == 0 || any(lengths(strings) == 0)) {
-    if (length(collapse) == 0) return(character(0))
+    if (length(collapse) == 0) {
+      return(character(0))
+    }
     return("")
   }
 
@@ -443,22 +475,31 @@ str_c <- function(..., sep = "", collapse = NULL) {
 #'   followed by one column for each capture group.
 #' @noRd
 str_extract <- function(string, pattern) {
-  if (length(string) == 0 || length(pattern) == 0) return(character(0))
+  if (length(string) == 0 || length(pattern) == 0) {
+    return(character(0))
+  }
 
   is_fixed <- inherits(pattern, "stringr_fixed")
 
   result <- Map(
     function(string, pattern) {
-      if (is.na(string) || is.na(pattern)) return(NA_character_)
+      if (is.na(string) || is.na(pattern)) {
+        return(NA_character_)
+      }
 
       regmatches(
         x = string,
         m = regexpr(
-          pattern = pattern, text = string, perl = !is_fixed, fixed = is_fixed
+          pattern = pattern,
+          text = string,
+          perl = !is_fixed,
+          fixed = is_fixed
         )
       )
     },
-    string, pattern, USE.NAMES = FALSE
+    string,
+    pattern,
+    USE.NAMES = FALSE
   )
 
   result[lengths(result) == 0] <- NA_character_
@@ -553,7 +594,11 @@ str_n_freq <- function(string = NULL, n = NULL, decreasing = TRUE) {
 #' @return A character vector.
 #' @noRd
 str_pad <- function(
-    string, width, side = c("left", "right", "both"), pad = " ", use_width = TRUE
+  string,
+  width,
+  side = c("left", "right", "both"),
+  pad = " ",
+  use_width = TRUE
 ) {
   if (!is.numeric(width)) {
     return(string[NA])
@@ -631,10 +676,16 @@ str_pad_digits <- function(string, pad = "0", side = "left", width = NULL) {
 #' @return A character vector.
 #' @noRd
 str_remove <- function(string, pattern) {
-  if (length(string) == 0 || length(pattern) == 0) return(character(0))
+  if (length(string) == 0 || length(pattern) == 0) {
+    return(character(0))
+  }
   is_fixed <- inherits(pattern, "stringr_fixed")
   Vectorize(sub, c("pattern", "x"), USE.NAMES = FALSE)(
-    pattern, replacement = "", x = string, perl = !is_fixed, fixed = is_fixed
+    pattern,
+    replacement = "",
+    x = string,
+    perl = !is_fixed,
+    fixed = is_fixed
   )
 }
 
@@ -687,7 +738,11 @@ str_replace <- function(string, pattern, replacement) {
   is_fixed <- inherits(pattern, "stringr_fixed")
 
   Vectorize(sub, c("pattern", "replacement", "x"), USE.NAMES = FALSE)(
-    pattern, replacement, x = string, perl = !is_fixed, fixed = is_fixed
+    pattern,
+    replacement,
+    x = string,
+    perl = !is_fixed,
+    fixed = is_fixed
   )
 }
 
@@ -695,11 +750,13 @@ str_replace <- function(string, pattern, replacement) {
 #' @rdname str_pad_digits
 #' @inheritParams stringstatic::str_replace
 #' @noRd
-str_replace_digits <- function(string,
-                               replacement,
-                               pad = "0",
-                               side = "left",
-                               width = NULL) {
+str_replace_digits <- function(
+  string,
+  replacement,
+  pad = "0",
+  side = "left",
+  width = NULL
+) {
   digits <- str_extract_digits(string)
 
   if (is.na(digits)) {

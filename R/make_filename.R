@@ -54,21 +54,23 @@
 #' )
 #'
 #' @export
-make_filename <- function(name = NULL,
-                          label = NULL,
-                          fileext = NULL,
-                          filename = NULL,
-                          path = NULL,
-                          prefix = NULL,
-                          postfix = NULL,
-                          pad = NULL,
-                          width = NULL,
-                          cache = FALSE,
-                          appname = NULL,
-                          pkg = NULL,
-                          create = TRUE,
-                          increment = NULL,
-                          call = caller_env()) {
+make_filename <- function(
+  name = NULL,
+  label = NULL,
+  fileext = NULL,
+  filename = NULL,
+  path = NULL,
+  prefix = NULL,
+  postfix = NULL,
+  pad = NULL,
+  width = NULL,
+  cache = FALSE,
+  appname = NULL,
+  pkg = NULL,
+  create = TRUE,
+  increment = NULL,
+  call = caller_env()
+) {
   appname <- appname %||% pkg
   cli_abort_ifnot(
     "{.arg name}, {.arg filename}, or {.arg path} must be provided.",

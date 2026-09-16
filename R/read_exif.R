@@ -33,14 +33,16 @@
 #' @export
 #' @importFrom cli cli_abort cli_warn
 #' @importFrom rlang has_name
-read_exif <- function(path = NULL,
-                      fileext = NULL,
-                      tags = NULL,
-                      format_exif = TRUE,
-                      xwalk = NULL,
-                      tz = NULL,
-                      .name_repair = "check_unique",
-                      ...) {
+read_exif <- function(
+  path = NULL,
+  fileext = NULL,
+  tags = NULL,
+  format_exif = TRUE,
+  xwalk = NULL,
+  tz = NULL,
+  .name_repair = "check_unique",
+  ...
+) {
   check_installed("exiftoolr")
 
   filenames <- list_path_filenames(path, fileext)
@@ -54,7 +56,7 @@ read_exif <- function(path = NULL,
     return(invisible(NULL))
   }
 
-  tags <- tags %||% getOption("filenamr.exif_tags", default = default_exif_tags)
+  tags <- tags %||% getOption("filenamr.exif_tags", default = filenamr::default_exif_tags)
 
   # FIXME: This is a partial list of filetypes that support GPS EXIF metadata
   # fileext <- match.arg(fileext, c("jpg", "jpeg", "png", "tiff", "pdf"))
@@ -81,7 +83,7 @@ read_exif <- function(path = NULL,
   }
 
   xwalk <- xwalk %||%
-    getOption("filenamr.exif_xwalk", default = default_exif_xwalk)
+    getOption("filenamr.exif_xwalk", default = filenamr::default_exif_xwalk)
 
   xwalk <- xwalk[has_name(data, xwalk)]
 
@@ -144,21 +146,23 @@ read_exif <- function(path = NULL,
 #' @export
 #' @importFrom rlang check_installed
 #' @importFrom cliExtras cli_list_files
-write_exif <- function(path,
-                       fileext = NULL,
-                       title = NULL,
-                       author = NULL,
-                       credit = author,
-                       date = NULL,
-                       keywords = NULL,
-                       description = NULL,
-                       alt = NULL,
-                       metadata = NULL,
-                       args = NULL,
-                       overwrite = TRUE,
-                       append_keywords = FALSE,
-                       quiet = FALSE,
-                       call = caller_env()) {
+write_exif <- function(
+  path,
+  fileext = NULL,
+  title = NULL,
+  author = NULL,
+  credit = author,
+  date = NULL,
+  keywords = NULL,
+  description = NULL,
+  alt = NULL,
+  metadata = NULL,
+  args = NULL,
+  overwrite = TRUE,
+  append_keywords = FALSE,
+  quiet = FALSE,
+  call = caller_env()
+) {
   check_installed("exiftoolr")
   cli_quiet(quiet)
 
@@ -212,9 +216,7 @@ write_exif <- function(path,
 #' Pass file path and replacement tag values to write_exif based on selected tag
 #'
 #' @noRd
-walk2_write_exif <- function(path,
-                             replacement_vals,
-                             tag = "keywords") {
+walk2_write_exif <- function(path, replacement_vals, tag = "keywords") {
   walk_vars <- set_names(replacement_vals, path)
 
   if (tag == "keywords") {
@@ -222,7 +224,8 @@ walk2_write_exif <- function(path,
       seq_along(walk_vars),
       function(i) {
         write_exif(
-          path = names(walk_vars)[i], keywords = walk_vars[[i]],
+          path = names(walk_vars)[i],
+          keywords = walk_vars[[i]],
           overwrite = TRUE,
           append_keywords = FALSE
         )
@@ -235,7 +238,8 @@ walk2_write_exif <- function(path,
       seq_along(walk_vars),
       function(i) {
         write_exif(
-          path = names(walk_vars)[i], title = walk_vars[[i]],
+          path = names(walk_vars)[i],
+          title = walk_vars[[i]],
           overwrite = TRUE
         )
       }
@@ -247,7 +251,8 @@ walk2_write_exif <- function(path,
       seq_along(walk_vars),
       function(i) {
         write_exif(
-          path = names(walk_vars)[i], description = walk_vars[[i]],
+          path = names(walk_vars)[i],
+          description = walk_vars[[i]],
           overwrite = TRUE
         )
       }
@@ -256,19 +261,21 @@ walk2_write_exif <- function(path,
 }
 
 #' @noRd
-set_write_exif_args <- function(title = NULL,
-                                author = NULL,
-                                credit = author,
-                                date = NULL,
-                                keywords = NULL,
-                                description = NULL,
-                                alt = NULL,
-                                metadata = NULL,
-                                args = NULL,
-                                overwrite = TRUE,
-                                append_keywords = FALSE,
-                                fileext = NULL,
-                                call = caller_env()) {
+set_write_exif_args <- function(
+  title = NULL,
+  author = NULL,
+  credit = author,
+  date = NULL,
+  keywords = NULL,
+  description = NULL,
+  alt = NULL,
+  metadata = NULL,
+  args = NULL,
+  overwrite = TRUE,
+  append_keywords = FALSE,
+  fileext = NULL,
+  call = caller_env()
+) {
   if (is.list(metadata)) {
     title <- title %||% metadata[["title"]]
     author <- author %||% metadata[["author"]]
@@ -307,7 +314,12 @@ set_write_exif_args <- function(title = NULL,
   if (!is.null(alt)) {
     # https://exiftool.org/TagNames/IPTC.html
     # https://www.iptc.org/std/photometadata/specification/IPTC-PhotoMetadata#alt-text-accessibility
-    args <- c(args, glue("-IPTC:AltTextAccessibility={alt}"))
+    args <- c(
+      args,
+      glue("-XMP-dc:ImageAltText={alt}"),
+      glue("-IPTC:AltTextAccessibility={alt}")
+    )
+
     if ("png" %in% fileext) {
       # https://exiftool.org/TagNames/PNG.html
       args <- c(args, glue("-iTXt={alt}"))
@@ -341,8 +353,14 @@ set_write_exif_args <- function(title = NULL,
 
   if (is.null(args)) {
     add_args <- c(
-      "title", "author", "creator", "description",
-      "alt", "date", "keywords", "metadata"
+      "title",
+      "author",
+      "creator",
+      "description",
+      "alt",
+      "date",
+      "keywords",
+      "metadata"
     )
 
     cli::cli_abort(

@@ -6,18 +6,9 @@
 # str_remove_fileext str_extract_fileext str_pad_digits str_increment_digits
 # is_any str_n_freq is_file
 
-.onLoad <- function(libname, pkgname) {
-  utils::data(
-    list = c(
-      "default_exif_tags", "default_exif_xwalk"
-    ),
-    package = pkgname,
-    envir = parent.env(environment())
-  )
-}
-
 utils::globalVariables(
   c(
-    "img_width", "img_height"
+    "img_width",
+    "img_height"
   )
 )

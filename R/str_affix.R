@@ -21,22 +21,33 @@
 #' @name str_affix
 #' @rdname str_affix
 #' @export
-str_affix <- function(string = NULL,
-                      prefix = NULL,
-                      postfix = NULL,
-                      sep = "_",
-                      pad = NULL,
-                      width = NULL,
-                      use_clean_names = TRUE,
-                      case = "snake",
-                      replace = c(`'` = "", `"` = "", `%` = "_pct_", `#` = "_num_"),
-                      use_make_names = TRUE,
-                      call = caller_env(),
-                      ...) {
+str_affix <- function(
+  string = NULL,
+  prefix = NULL,
+  postfix = NULL,
+  sep = "_",
+  pad = NULL,
+  width = NULL,
+  use_clean_names = TRUE,
+  case = "snake",
+  replace = c(`'` = "", `"` = "", `%` = "_pct_", `#` = "_num_"),
+  use_make_names = TRUE,
+  call = caller_env(),
+  ...
+) {
   cli_abort_ifnot(
-    "{.arg string} must be a {.cls character} or NULL." = is.character(string) || is.null(string),
-    "{.arg prefix}  must be a {.cls character}, {.cls Date}, {.cls POSIXct}, or NULL." = is.null(prefix) || rlang::inherits_any(prefix, c("character", "Date", "POSIXct")),
-    "{.arg postfix}  must be a {.cls character}, {.cls Date}, {.cls POSIXct}, or NULL." = is.null(postfix) || rlang::inherits_any(postfix, c("character", "Date", "POSIXct")),
+    "{.arg string} must be a {.cls character} or NULL." = is.character(
+      string
+    ) ||
+      is.null(string),
+    "{.arg prefix}  must be a {.cls character}, {.cls Date}, {.cls POSIXct}, or NULL." = is.null(
+      prefix
+    ) ||
+      rlang::inherits_any(prefix, c("character", "Date", "POSIXct")),
+    "{.arg postfix}  must be a {.cls character}, {.cls Date}, {.cls POSIXct}, or NULL." = is.null(
+      postfix
+    ) ||
+      rlang::inherits_any(postfix, c("character", "Date", "POSIXct")),
     call = call
   )
 
@@ -51,7 +62,8 @@ str_affix <- function(string = NULL,
 
   # Add prefix and postfix
   string <-
-    str_prefix(string,
+    str_prefix(
+      string,
       prefix,
       sep = sep,
       use_clean_names = use_clean_names,
@@ -86,27 +98,26 @@ str_affix <- function(string = NULL,
 #' @param ... Additional parameters passed to janitor::make_clean_names() if
 #'   use_clean_names is `TRUE`.
 #' @export
-str_prefix <- function(string = NULL,
-                       prefix = NULL,
-                       sep = "_",
-                       is_postfix = FALSE,
-                       date.format = "%Y-%m-%d",
-                       time.format = "%Y-%m-%d_%I-%M-%S_%p",
-                       use_clean_names = TRUE,
-                       case = "snake",
-                       replace = c(`'` = "", `"` = "", `%` = "_pct_", `#` = "_num_"),
-                       use_make_names = TRUE,
-                       ...) {
+str_prefix <- function(
+  string = NULL,
+  prefix = NULL,
+  sep = "_",
+  is_postfix = FALSE,
+  date.format = "%Y-%m-%d",
+  time.format = "%Y-%m-%d_%I-%M-%S_%p",
+  use_clean_names = TRUE,
+  case = "snake",
+  replace = c(`'` = "", `"` = "", `%` = "_pct_", `#` = "_num_"),
+  use_make_names = TRUE,
+  ...
+) {
   if (is.null(prefix)) {
     return(string)
   }
 
   if (prefix %in% c("date", "time") && !is.null(c(date.format, time.format))) {
     prefix <-
-      switch(prefix,
-        "date" = Sys.Date(),
-        "time" = Sys.time()
-      )
+      switch(prefix, "date" = Sys.Date(), "time" = Sys.time())
   }
 
   if (inherits(prefix, "Date")) {
@@ -126,7 +137,9 @@ str_prefix <- function(string = NULL,
 
     prefix <-
       janitor::make_clean_names(
-        prefix, case, replace,
+        prefix,
+        case,
+        replace,
         use_make_names = use_make_names,
         ...
       )

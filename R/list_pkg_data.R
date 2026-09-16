@@ -9,11 +9,13 @@
 #' @inheritParams rlang::check_installed
 #' @export
 #' @importFrom rlang caller_env check_installed
-list_pkg_data <- function(pkg = NULL,
-                          version = NULL,
-                          dir = "extdata",
-                          lib.loc = NULL,
-                          call = caller_env()) {
+list_pkg_data <- function(
+  pkg = NULL,
+  version = NULL,
+  dir = "extdata",
+  lib.loc = NULL,
+  call = caller_env()
+) {
   check_installed(pkg, version = version, call = call)
 
   rbind(
@@ -29,8 +31,7 @@ list_pkg_data <- function(pkg = NULL,
 #' @export
 #' @importFrom utils data
 #' @importFrom rlang set_names
-list_pkg_datasets <- function(pkg,
-                              lib.loc = NULL) {
+list_pkg_datasets <- function(pkg, lib.loc = NULL) {
   check_string(pkg)
   data_files <-
     as.data.frame(
@@ -53,10 +54,12 @@ list_pkg_datasets <- function(pkg,
 #' @inheritParams base::list.files
 #' @export
 #' @importFrom rlang is_empty
-list_pkg_extdata <- function(pkg,
-                             dir = "extdata",
-                             full.names = TRUE,
-                             recursive = TRUE) {
+list_pkg_extdata <- function(
+  pkg,
+  dir = "extdata",
+  full.names = TRUE,
+  recursive = TRUE
+) {
   check_string(pkg)
   if (length(dir) > 1) {
     list_system_files <- Vectorize(list_system_files, "dir", TRUE, FALSE)
@@ -79,12 +82,14 @@ list_pkg_extdata <- function(pkg,
 #' List system files for a package
 #'
 #' @noRd
-list_system_files <- function(pkg,
-                              dir = "extdata",
-                              full.names = TRUE,
-                              recursive = TRUE,
-                              include.dirs = FALSE,
-                              ...) {
+list_system_files <- function(
+  pkg,
+  dir = "extdata",
+  full.names = TRUE,
+  recursive = TRUE,
+  include.dirs = FALSE,
+  ...
+) {
   list.files(
     path = system.file(dir, package = pkg),
     recursive = recursive,
@@ -99,9 +104,7 @@ list_system_files <- function(pkg,
 #' @export
 #' @importFrom rlang is_installed is_empty
 #' @importFrom rappdirs user_cache_dir
-list_pkg_cachedata <- function(pkg,
-                               full.names = TRUE,
-                               recursive = TRUE) {
+list_pkg_cachedata <- function(pkg, full.names = TRUE, recursive = TRUE) {
   check_string(pkg)
   cache_dir <- rappdirs::user_cache_dir(pkg)
 

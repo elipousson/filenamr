@@ -10,7 +10,12 @@
 #' @seealso [isstatic::as_cardinal_bearing()]
 #' @export
 #' @importFrom rlang has_name
-fmt_exif_direction <- function(data, winds = 8, .after = "img_direction", call = caller_env()) {
+fmt_exif_direction <- function(
+  data,
+  winds = 8,
+  .after = "img_direction",
+  call = caller_env()
+) {
   if (is.character(data)) {
     return(as_cardinal_bearing(data, winds))
   }
@@ -41,27 +46,28 @@ fmt_exif_direction <- function(data, winds = 8, .after = "img_direction", call =
 
 #' @noRd
 fmt_exif_orientation <- function(data) {
-  if (!has_all_names(
-    data,
-    c("exif_orientation", "img_width", "img_width")
-  )) {
+  if (
+    !has_all_names(
+      data,
+      c("exif_orientation", "img_width", "img_width")
+    )
+  ) {
     return(data)
   }
 
   dplyr::mutate(
     data,
-    exif_orientation =
-      dplyr::case_when(
-        exif_orientation == 1 ~ "Horizontal (normal)",
-        exif_orientation == 2 ~ "Mirror horizontal",
-        exif_orientation == 3 ~ "Rotate 180",
-        exif_orientation == 4 ~ "Mirror vertical",
-        exif_orientation == 5 ~ "Mirror horizontal and rotate 270 CW",
-        exif_orientation == 6 ~ "Rotate 90 CW",
-        exif_orientation == 7 ~ "Mirror horizontal and rotate 90 CW",
-        exif_orientation == 8 ~ "Rotate 270 CW",
-        TRUE ~ NA_character_
-      ),
+    exif_orientation = dplyr::case_when(
+      exif_orientation == 1 ~ "Horizontal (normal)",
+      exif_orientation == 2 ~ "Mirror horizontal",
+      exif_orientation == 3 ~ "Rotate 180",
+      exif_orientation == 4 ~ "Mirror vertical",
+      exif_orientation == 5 ~ "Mirror horizontal and rotate 270 CW",
+      exif_orientation == 6 ~ "Rotate 90 CW",
+      exif_orientation == 7 ~ "Mirror horizontal and rotate 90 CW",
+      exif_orientation == 8 ~ "Rotate 270 CW",
+      TRUE ~ NA_character_
+    ),
     # FIXME: as_orientation stopped working around 2023-03-20 - check and fix
     # orientation = as_orientation(img_width / img_height, 0),
     orientation = dplyr::case_when(
