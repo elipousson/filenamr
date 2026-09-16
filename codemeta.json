@@ -14,7 +14,7 @@
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.4.1 (2024-06-14)",
+  "runtimePlatform": "R version 4.5.3 (2026-03-11)",
   "author": [
     {
       "@type": "Person",
@@ -211,8 +211,8 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "129.971KB",
-  "releaseNotes": "https://github.com/elipousson/filenamr/blob/master/NEWS.md",
+  "fileSize": "127.429KB",
+  "releaseNotes": "https://github.com/elipousson/filenamr/blob/main/NEWS.md",
   "readme": "https://github.com/elipousson/filenamr/blob/main/README.md",
   "contIntegration": "https://app.codecov.io/gh/elipousson/filenamr?branch=main",
   "developmentStatus": ["https://lifecycle.r-lib.org/articles/stages.html#experimental", "https://www.repostatus.org/#active"],
