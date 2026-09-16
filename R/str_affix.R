@@ -115,7 +115,11 @@ str_prefix <- function(
     return(string)
   }
 
-  if (prefix %in% c("date", "time") && !is.null(c(date.format, time.format))) {
+  if (
+    length(prefix) == 1 &&
+      prefix %in% c("date", "time") &&
+      !is.null(c(date.format, time.format))
+  ) {
     prefix <-
       switch(prefix, "date" = Sys.Date(), "time" = Sys.time())
   }

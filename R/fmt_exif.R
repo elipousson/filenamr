@@ -17,7 +17,7 @@ fmt_exif_direction <- function(
   call = caller_env()
 ) {
   if (is.character(data)) {
-    return(as_cardinal_bearing(data, winds))
+    return(as_cardinal_bearing(as.numeric(data), winds))
   }
 
   cli_abort_ifnot(

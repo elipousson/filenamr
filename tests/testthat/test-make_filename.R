@@ -45,6 +45,18 @@ test_that("make_filename works", {
   )
 })
 
+test_that("path_dir returns NULL as-is", {
+  expect_null(path_dir(NULL))
+})
+
+test_that("path_dir returns NULL for a bare filename with no directory", {
+  expect_null(path_dir("file.csv"))
+})
+
+test_that("path_dir returns the parent directory of a path", {
+  expect_identical(path_dir("some/dir/file.csv"), "some/dir")
+})
+
 test_that("make_filename warns", {
   expect_warning(
     make_filename(name = "data", fileext = "csv", filename = "data.csv"),
